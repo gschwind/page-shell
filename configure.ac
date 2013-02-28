@@ -138,11 +138,21 @@ AS_IF([test x$enable_browser_plugin = xyes], [
 ])
 AM_CONDITIONAL(BUILD_BROWSER_PLUGIN, test x$enable_browser_plugin = xyes)
 
+AC_MSG_CHECKING([for bluetooth support])
+AC_ARG_WITH([bluetooth],
+	AS_HELP_STRING([--without-bluetooth],
+		[Build without gnome-bluetooth library (default: auto)]))
+AS_IF([test "x$with_bluetooth" != "xno"], [
 PKG_CHECK_MODULES(BLUETOOTH, gnome-bluetooth-1.0 >= 3.9.0,
-        [AC_DEFINE([HAVE_BLUETOOTH],[1],[Define if you have libgnome-bluetooth-applet])
-	 AC_SUBST([HAVE_BLUETOOTH],[1])],
+	[AC_DEFINE([HAVE_BLUETOOTH],[1],[Define if you have libgnome-bluetooth-applet])
+	 AC_SUBST([HAVE_BLUETOOTH],[1])
+	 AC_MSG_RESULT([yes])],
 	[AC_DEFINE([HAVE_BLUETOOTH],[0])
-	 AC_SUBST([HAVE_BLUETOOTH],[0])])
+	 AC_SUBST([HAVE_BLUETOOTH],[0])
+	 AC_MSG_RESULT([no])])
+], [AC_DEFINE([HAVE_BLUETOOTH],[0])
+	 AC_SUBST([HAVE_BLUETOOTH],[0])
+	 AC_MSG_RESULT([no])])
 
 PKG_CHECK_MODULES(CALENDAR_SERVER, libecal-1.2 >= $LIBECAL_MIN_VERSION libedataserver-1.2 >= $LIBEDATASERVER_MIN_VERSION gio-2.0)
 AC_SUBST(CALENDAR_SERVER_CFLAGS)
