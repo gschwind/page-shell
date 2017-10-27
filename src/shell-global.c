@@ -686,6 +686,17 @@ shell_global_get_stage (ShellGlobal  *global)
 }
 
 /**
+ * shell_global_get_wm:
+ *
+ * Return value: (transfer none): The default #ShellWM
+ */
+ShellWM *
+shell_global_get_wm (ShellGlobal *global)
+{
+  return global->wm;
+}
+
+/**
  * shell_global_get_screen:
  *
  * Return value: (transfer none): The default #MetaScreen

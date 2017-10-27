@@ -1,17 +1,18 @@
-project('gnome-shell', 'c',
+project('gnome-shell', ['c', 'cpp'],
   version: '3.27.1',
   meson_version: '>= 0.42.0',
-  license: 'GPLv2+'
+  license: 'GPLv2+',
+  default_options: ['cpp_std=c++11']
 )
 
 # We depend on a specific version of the libmutter API. The mutter variants of
 # the Cogl and Clutter libraries also use this API version.
 mutter_api_version = '1'
 
-clutter_pc = 'mutter-clutter-' + mutter_api_version
-cogl_pc = 'mutter-cogl-' + mutter_api_version
-cogl_pango_pc = 'mutter-cogl-pango-' + mutter_api_version
-libmutter_pc = 'libmutter-' + mutter_api_version
+clutter_pc = 'pxmutter-clutter-' + mutter_api_version
+cogl_pc = 'pxmutter-cogl-' + mutter_api_version
+cogl_pango_pc = 'pxmutter-cogl-pango-' + mutter_api_version
+libmutter_pc = 'libpxmutter-' + mutter_api_version
 
 croco_req = '>= 0.6.8'
 ecal_req = '>= 3.5.3'
@@ -160,6 +161,7 @@ python = find_program('python3')
 sassc = find_program('sassc', required: false)
 
 cc = meson.get_compiler('c')
+cpp = meson.get_compiler('cpp')
 
 m_dep = cc.find_library('m', required: false)
 
