@@ -32,6 +32,7 @@
 extern "C" {
 #include <meta/keybindings.h>
 #include <meta/main.h>
+#include "shell-global.h"
 #include "shell-wm.h"
 }
 
@@ -370,8 +371,8 @@ void page_t::_handler_plugin_start()
 
 	log::printf("wndow-group = %p, xparent = %p, stage = %p\n", window_group, xparent, stage);
 	_viewport_group = clutter_actor_new();
-//	clutter_actor_insert_child_below(window_group, _viewport_group, window_group);
-	clutter_actor_insert_child_above(xparent, _viewport_group, NULL);
+//	clutter_actor_insert_child_below(xparent, _viewport_group, window_group);
+//	//clutter_actor_insert_child_above(xparent, _viewport_group, NULL);
 	clutter_actor_show(_viewport_group);
 
 	_overlay_group = clutter_actor_new();
@@ -418,7 +419,10 @@ void page_t::_handler_plugin_start()
 	update_workspace_visibility(0);
 	sync_tree_view();
 
-	clutter_actor_show(stage);
+	//clutter_actor_show(stage);
+
+	auto global = shell_global_get();
+	shell_global_set_viewports_layer(global, _viewport_group);
 
 }
 
@@ -1074,9 +1078,9 @@ void page_t::update_viewport_layout() {
 
 	auto window_group = meta_get_window_group_for_screen(_screen);
 	auto xparent = clutter_actor_get_parent(window_group);
-	clutter_actor_set_child_below_sibling(xparent, _viewport_group, window_group);
-	clutter_actor_set_child_above_sibling(xparent, _viewport_group, NULL);
-	clutter_actor_set_child_above_sibling(xparent, _overlay_group, NULL);
+	//clutter_actor_set_child_below_sibling(xparent, _viewport_group, window_group);
+	//clutter_actor_set_child_above_sibling(xparent, _viewport_group, NULL);
+	//clutter_actor_set_child_above_sibling(xparent, _overlay_group, NULL);
 
 	int const n_monitor = meta_screen_get_n_monitors(_screen);
 	for(auto w: _workspace_list) {

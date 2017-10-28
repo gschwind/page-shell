@@ -224,6 +224,7 @@ gnome_shell_plugin_start (MetaPlugin *plugin)
 
   shell_plugin->global = shell_global_get ();
   _shell_global_set_plugin (shell_plugin->global, META_PLUGIN (shell_plugin));
+  page_init(META_PLUGIN(shell_plugin));
 
   gjs_context = _shell_global_get_gjs_context (shell_plugin->global);
 
@@ -251,8 +252,6 @@ gnome_shell_plugin_start (MetaPlugin *plugin)
       g_object_unref (gjs_context);
       exit (1);
     }
-
-  page_init(META_PLUGIN(shell_plugin));
 
 }
 
