@@ -92,6 +92,8 @@ struct _ShellGlobal {
   gboolean has_modal;
   gboolean frame_timestamps;
   gboolean frame_finish_timestamp;
+
+  ClutterActor *viewports_layer;
 };
 
 enum {
@@ -114,6 +116,7 @@ enum {
   PROP_FOCUS_MANAGER,
   PROP_FRAME_TIMESTAMPS,
   PROP_FRAME_FINISH_TIMESTAMP,
+  PROP_VIEWPORTS_LAYER
 };
 
 /* Signals */
@@ -223,6 +226,9 @@ shell_global_get_property(GObject         *object,
       break;
     case PROP_FRAME_FINISH_TIMESTAMP:
       g_value_set_boolean (value, global->frame_finish_timestamp);
+      break;
+    case PROP_VIEWPORTS_LAYER:
+      g_value_set_object (value, global->viewports_layer);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -490,6 +496,14 @@ shell_global_class_init (ShellGlobalClass *klass)
                                                          "Whether at the end of a frame to call glFinish and log paintCompletedTimestamp",
                                                          FALSE,
                                                          G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_VIEWPORTS_LAYER,
+                                   g_param_spec_object ("viewports-layer",
+                                                        "Viewports Layer",
+                                                        "Actor holding viewports actors",
+                                                        CLUTTER_TYPE_ACTOR,
+                                                        G_PARAM_READABLE));
 }
 
 /*
@@ -1552,6 +1566,18 @@ shell_global_get_current_time (ShellGlobal *global)
 
   return clutter_get_current_event_time ();
 }
+
+/**
+ * shell_global_set_viewports_layer:
+ * @global: A #ShellGlobal
+ * @actor: The viewports layer.
+ */
+void
+shell_global_set_viewports_layer (ShellGlobal *global, ClutterActor *actor)
+{
+	global->viewports_layer = actor;
+}
+
 
 /**
  * shell_global_create_app_launch_context:
