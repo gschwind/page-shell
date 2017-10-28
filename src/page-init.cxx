@@ -69,5 +69,7 @@ void page_init(MetaPlugin * plugin)
   x->g_connectable_t::g_connect(wm, "create-inhibit-shortcuts-dialog",
       &page::page_t::_handler_plugin_create_inhibit_shortcuts_dialog);
 
+  x->_handler_plugin_start();
+
 }
 

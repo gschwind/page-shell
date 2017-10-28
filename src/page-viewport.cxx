@@ -21,25 +21,23 @@ using namespace std;
 
 viewport_t::viewport_t(tree_t * ref, rect const & area) :
 		page_component_t{ref},
-		_raw_aera{area},
-		_effective_area{area},
+		_work_area{area},
 		_subtree{nullptr}
 {
-	_page_area = rect{0, 0, _effective_area.w, _effective_area.h};
 	auto n = make_shared<notebook_t>(this);
 	_subtree = static_pointer_cast<page_component_t>(n);
 	push_back(_subtree);
 
 	_canvas = clutter_canvas_new();
 	g_object_ref_sink(_canvas);
-	clutter_canvas_set_size(CLUTTER_CANVAS(_canvas), _effective_area.w, _effective_area.h);
-
 	_default_view = clutter_actor_new();
 	g_object_ref_sink(_default_view);
 	clutter_actor_set_content(_default_view, _canvas);
 	clutter_actor_set_content_scaling_filters(_default_view,
 			CLUTTER_SCALING_FILTER_NEAREST, CLUTTER_SCALING_FILTER_NEAREST);
 	clutter_actor_set_reactive (_default_view, TRUE);
+
+	_update_canvas();
 
 	g_connect(CLUTTER_CANVAS(_canvas), "draw", &viewport_t::draw);
 	g_connect(CLUTTER_ACTOR(_default_view), "button-press-event", &viewport_t::_handler_button_press_event);
@@ -48,16 +46,17 @@ viewport_t::viewport_t(tree_t * ref, rect const & area) :
 	g_connect(CLUTTER_ACTOR(_default_view), "enter-event", &viewport_t::_handler_enter_event);
 	g_connect(CLUTTER_ACTOR(_default_view), "leave-event", &viewport_t::_handler_leave_event);
 
-	clutter_content_invalidate(_canvas);
-	clutter_actor_set_position(_default_view, _effective_area.x, _effective_area.y);
-	clutter_actor_set_size(_default_view, _effective_area.w, _effective_area.h);
-
-	_subtree->set_allocation(_page_area);
+	_subtree->set_allocation(rect(0, 0, _work_area.w, _work_area.h));
 }
 
 viewport_t::~viewport_t() {
 	g_object_unref(_canvas);
 	g_object_unref(_default_view);
+}
+
+void viewport_t::update_work_area(rect const & area)
+{
+	set_allocation(area);
 }
 
 void viewport_t::replace(shared_ptr<page_component_t> src, shared_ptr<page_component_t> by) {
@@ -69,7 +68,7 @@ void viewport_t::replace(shared_ptr<page_component_t> src, shared_ptr<page_compo
 		remove(_subtree);
 		_subtree = by;
 		push_back(_subtree);
-		_subtree->set_allocation(_page_area);
+		_subtree->set_allocation(rect(0, 0, _work_area.w, _work_area.h));
 
 		if(_is_visible)
 			_subtree->show();
@@ -88,19 +87,11 @@ void viewport_t::remove(shared_ptr<tree_t> src) {
 }
 
 void viewport_t::set_allocation(rect const & area) {
-	_effective_area = area;
-	_page_area = rect{0, 0, _effective_area.w, _effective_area.h};
+	_work_area = area;
+	_update_canvas();
 	if(_subtree != nullptr)
-		_subtree->set_allocation(_page_area);
+		_subtree->set_allocation(rect(0, 0, _work_area.w, _work_area.h));
 	queue_redraw();
-}
-
-void viewport_t::set_raw_area(rect const & area) {
-	_raw_aera = area;
-}
-
-rect const & viewport_t::raw_area() const {
-	return _raw_aera;
 }
 
 string viewport_t::get_node_name() const {
@@ -132,11 +123,7 @@ void viewport_t::on_workspace_disable()
 }
 
 rect viewport_t::allocation() const {
-	return _effective_area;
-}
-
-rect const & viewport_t::page_area() const {
-	return _page_area;
+	return _work_area;
 }
 
 void viewport_t::hide() {
@@ -169,6 +156,14 @@ void viewport_t::draw(ClutterCanvas * _, cairo_t * cr, int width, int height) {
 
 	cairo_restore(cr);
 
+}
+
+void viewport_t::_update_canvas()
+{
+	clutter_canvas_set_size(CLUTTER_CANVAS(_canvas), _work_area.w, _work_area.h);
+	clutter_actor_set_position(_default_view, _work_area.x, _work_area.y);
+	clutter_actor_set_size(_default_view, _work_area.w, _work_area.h);
+	clutter_content_invalidate(_canvas);
 }
 
 /* mark renderable_page for redraw */
@@ -229,11 +224,6 @@ auto viewport_t::_handler_leave_event(ClutterActor * actor, ClutterEvent * event
 	broadcast_leave(event);
 
 	return FALSE;
-}
-
-
-rect viewport_t::get_window_position() const {
-	return _effective_area;
 }
 
 void viewport_t::get_min_allocation(int & width, int & height) const {

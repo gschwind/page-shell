@@ -61,19 +61,19 @@ void view_floating_t::_init()
 	_client->_floating_wished_position = rect(xrect.x, xrect.y, xrect.width,
 			xrect.height);
 
-	// if x == 0 then place window at center of the screen
-	if (_client->_floating_wished_position.x == 0) {
-		_client->_floating_wished_position.x =
-				(_root->primary_viewport()->raw_area().w
-						- _client->_floating_wished_position.w) / 2;
-	}
-
-	// if y == 0 then place window at center of the screen
-	if (_client->_floating_wished_position.y == 0) {
-		_client->_floating_wished_position.y =
-				(_root->primary_viewport()->raw_area().h
-						- _client->_floating_wished_position.h) / 2;
-	}
+//	// if x == 0 then place window at center of the screen
+//	if (_client->_floating_wished_position.x == 0) {
+//		_client->_floating_wished_position.x =
+//				(_root->primary_viewport()->raw_area().w
+//						- _client->_floating_wished_position.w) / 2;
+//	}
+//
+//	// if y == 0 then place window at center of the screen
+//	if (_client->_floating_wished_position.y == 0) {
+//		_client->_floating_wished_position.y =
+//				(_root->primary_viewport()->raw_area().h
+//						- _client->_floating_wished_position.h) / 2;
+//	}
 
 
 	_client->_absolute_position = _client->_floating_wished_position;

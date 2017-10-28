@@ -81,12 +81,11 @@ void workspace_t::_init()
 workspace_t::workspace_t(page_t * ctx, MetaWorkspace * workspace) :
 	tree_t{this},
 	_ctx{ctx},
-	//_allocation{},
+	_meta_workspace{workspace},
 	_default_pop{},
 	_primary_viewport{},
 	_switch_direction{WORKSPACE_SWITCH_LEFT},
-	_is_enable{false},
-	_meta_workspace{workspace}
+	_is_enable{false}
 {
 	_init();
 }
@@ -94,12 +93,11 @@ workspace_t::workspace_t(page_t * ctx, MetaWorkspace * workspace) :
 workspace_t::workspace_t(page_t * ctx, guint32 time) :
 	tree_t{this},
 	_ctx{ctx},
-	//_allocation{},
+	_meta_workspace{nullptr},
 	_default_pop{},
 	_primary_viewport{},
 	_switch_direction{WORKSPACE_SWITCH_LEFT},
-	_is_enable{false},
-	_meta_workspace{nullptr}
+	_is_enable{false}
 {
 	_meta_workspace = meta_screen_append_new_workspace(ctx->_screen, FALSE, time);
 	_init();
@@ -134,11 +132,12 @@ void workspace_t::update_viewports_layout()
 {
 	_viewport_layer->clear();
 
-	MetaScreen * screen = meta_plugin_get_screen(_ctx->_plugin);
+	auto screen = meta_plugin_get_screen(_ctx->_plugin);
+	auto n_monitor = meta_screen_get_n_monitors(screen);
 
 	vector<rect> viewport_allocation;
 	region already_allocated;
-	for(int monitor_id = 0; monitor_id < meta_screen_get_n_monitors(screen); ++monitor_id) {
+	for(int monitor_id = 0; monitor_id < n_monitor; ++monitor_id) {
 		MetaRectangle area;
 		meta_workspace_get_work_area_for_monitor(_meta_workspace, monitor_id, &area);
 		region region_to_alocate{rect{area}};
@@ -161,7 +160,7 @@ void workspace_t::update_viewports_layout()
 		viewport_p vp;
 		if (i < old_layout.size()) {
 			vp = old_layout[i];
-			vp->set_raw_area(viewport_allocation[i]);
+			vp->update_work_area(viewport_allocation[i]);
 		} else {
 			vp = make_shared<viewport_t>(this, viewport_allocation[i]);
 		}

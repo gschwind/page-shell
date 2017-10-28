@@ -32,6 +32,7 @@
 extern "C" {
 #include <meta/keybindings.h>
 #include <meta/main.h>
+#include "shell-wm.h"
 }
 
 #include "page-utils.hxx"
@@ -364,12 +365,20 @@ void page_t::_handler_plugin_start()
 	auto stage = meta_get_stage_for_screen(_screen);
 	auto window_group = meta_get_window_group_for_screen(_screen);
 
+	auto xparent = clutter_actor_get_parent(window_group);
+
+
+	log::printf("wndow-group = %p, xparent = %p, stage = %p\n", window_group, xparent, stage);
 	_viewport_group = clutter_actor_new();
-	clutter_actor_insert_child_below(stage, _viewport_group, window_group);
+//	clutter_actor_insert_child_below(window_group, _viewport_group, window_group);
+	clutter_actor_insert_child_above(xparent, _viewport_group, NULL);
 	clutter_actor_show(_viewport_group);
 
 	_overlay_group = clutter_actor_new();
-	clutter_actor_insert_child_above(stage, _overlay_group, NULL);
+//	clutter_actor_insert_child_above(window_group, _overlay_group, NULL);
+
+	// insert above all childs
+	clutter_actor_insert_child_above(xparent, _overlay_group, NULL);
 	clutter_actor_show(_overlay_group);
 
 	GSettings * setting_keybindings = g_settings_new("net.hzog.page.keybindings");
@@ -420,25 +429,25 @@ void page_t::_handler_plugin_minimize(ShellWM * wm, MetaWindowActor * actor)
 
 	auto mw = lookup_client_managed_with(actor);
 	if (not mw) {
-		meta_plugin_minimize_completed(_plugin, actor);
+	    shell_wm_completed_minimize(wm, actor);
 		return;
 	}
 
 	auto fv = current_workspace()->lookup_view_for(mw);
 	if (not fv) {
-		meta_plugin_minimize_completed(_plugin, actor);
+	    shell_wm_completed_minimize(wm, actor);
 		return;
 	}
 
 	current_workspace()->switch_view_to_notebook(fv, 0);
-	meta_plugin_minimize_completed(_plugin, actor);
+	shell_wm_completed_minimize(wm, actor);
 
 }
 
 void page_t::_handler_plugin_unminimize(ShellWM * wm, MetaWindowActor * actor)
 {
 	log::printf("call %s\n", __PRETTY_FUNCTION__);
-	meta_plugin_unminimize_completed(_plugin, actor);
+	shell_wm_completed_unminimize(wm, actor);
 }
 
 void page_t::_handler_plugin_size_changed(ShellWM * wm, MetaWindowActor * window_actor)
@@ -495,7 +504,7 @@ void page_t::_handler_plugin_size_change(ShellWM * wm, MetaWindowActor * window_
 		break;
 	}
 
-	meta_plugin_size_change_completed(_plugin, window_actor);
+	shell_wm_completed_size_change(wm, window_actor);
 }
 
 void page_t::_handler_plugin_map(ShellWM * wm, MetaWindowActor * window_actor)
@@ -522,9 +531,9 @@ void page_t::_handler_plugin_map(ShellWM * wm, MetaWindowActor * window_actor)
 		g_connect(meta_window, "unmanaged", &page_t::_handler_window_unmanaged);
 
 		insert_as_notebook(mw, 0);
-		meta_plugin_map_completed(_plugin, window_actor);
+		shell_wm_completed_map(wm, window_actor);
 	} else
-		meta_plugin_map_completed(_plugin, window_actor);
+	        shell_wm_completed_map(wm, window_actor);
 }
 
 void page_t::_handler_plugin_destroy(ShellWM * wm, MetaWindowActor * actor)
@@ -536,7 +545,7 @@ void page_t::_handler_plugin_destroy(ShellWM * wm, MetaWindowActor * actor)
 	}
 
 	g_disconnect_from_obj(meta_window_actor_get_meta_window(actor));
-	meta_plugin_destroy_completed(_plugin, actor);
+	shell_wm_completed_destroy(wm, actor);
 }
 
 void page_t::_handler_plugin_switch_workspace(ShellWM * wm, gint from, gint to, MetaMotionDirection direction)
@@ -545,7 +554,7 @@ void page_t::_handler_plugin_switch_workspace(ShellWM * wm, gint from, gint to, 
 
 	switch_to_workspace(to, 0);
 
-	meta_plugin_switch_workspace_completed(_plugin);
+	shell_wm_completed_switch_workspace(wm);
 }
 
 void page_t::_handler_plugin_show_tile_preview(ShellWM * wm, MetaWindow * window, MetaRectangle *tile_rect, int tile_monitor_number)
@@ -1003,7 +1012,7 @@ void page_t::move_fullscreen_to_viewport(view_fullscreen_p fv, viewport_p v) {
 		fv->_viewport.lock()->show();
 	}
 
-	fv->_client->_absolute_position = v->raw_area();
+//	fv->_client->_absolute_position = v->raw_area();
 	fv->_viewport = v;
 	fv->show();
 	v->hide();
@@ -1059,9 +1068,20 @@ void page_t::update_viewport_layout() {
 	_theme->update(area.width, area.height);
 
 	clutter_actor_set_position(_overlay_group, 0.0, 0.0);
-	clutter_actor_set_size(_overlay_group, area.width, area.height);
+	clutter_actor_set_size(_overlay_group, -1, -1);
 	clutter_actor_set_position(_viewport_group, 0.0, 0.0);
-	clutter_actor_set_size(_viewport_group, area.width, area.height);
+	clutter_actor_set_size(_viewport_group, -1, -1);
+
+	auto window_group = meta_get_window_group_for_screen(_screen);
+	auto xparent = clutter_actor_get_parent(window_group);
+	clutter_actor_set_child_below_sibling(xparent, _viewport_group, window_group);
+	clutter_actor_set_child_above_sibling(xparent, _viewport_group, NULL);
+	clutter_actor_set_child_above_sibling(xparent, _overlay_group, NULL);
+
+	int const n_monitor = meta_screen_get_n_monitors(_screen);
+	for(auto w: _workspace_list) {
+		w->update_viewports_layout();
+	}
 
 }
 
@@ -1084,15 +1104,6 @@ void page_t::remove_viewport(shared_ptr<workspace_t> d, shared_ptr<viewport_t> v
 		d->insert_as_floating(x->_client, XCB_CURRENT_TIME);
 	}
 
-}
-
-shared_ptr<viewport_t> page_t::find_mouse_viewport(int x, int y) const {
-	auto viewports = current_workspace()->get_viewports();
-	for (auto v: viewports) {
-		if (v->raw_area().is_inside(x, y))
-			return v;
-	}
-	return shared_ptr<viewport_t>{};
 }
 
 void page_t::insert_as_floating(client_managed_p c, xcb_timestamp_t time) {
@@ -1471,9 +1482,7 @@ void page_t::sync_tree_view()
 	}
 
 	auto window_group = meta_get_window_group_for_screen(_screen);
-
-	//_root->print_tree(0);
-
+//        clutter_actor_raise(_viewport_group, NULL);
 	auto children = current_workspace()->gather_children_root_first<view_t>();
 	log::printf("found %lu children\n", children.size());
 	for(auto x: children) {
@@ -1481,6 +1490,7 @@ void page_t::sync_tree_view()
 		meta_window_raise(x->_client->meta_window());
 		meta_window_actor_sync_visibility(x->_client->meta_window_actor());
 	}
+//        clutter_actor_raise(_overlay_group, NULL);
 
 	guard = false;
 

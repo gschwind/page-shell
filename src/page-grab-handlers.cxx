@@ -785,71 +785,71 @@ void grab_floating_resize_t::button_release(ClutterEvent const * e)
 	}
 }
 
-grab_fullscreen_client_t::grab_fullscreen_client_t(page_t * ctx, view_fullscreen_p mw, xcb_button_t button, int x, int y) :
- grab_default_t{ctx},
- mw{mw},
- button{button}
-{
-	v = _ctx->find_mouse_viewport(x, y);
-
-}
-
-grab_fullscreen_client_t::~grab_fullscreen_client_t() {
-
-}
-
-void grab_fullscreen_client_t::button_press(ClutterEvent const * e) {
-
-}
-
-void grab_fullscreen_client_t::button_motion(ClutterEvent const * e)
-{
-	gfloat x, y;
-	clutter_event_get_coords(e, &x, &y);
-	auto time = clutter_event_get_time(e);
-
-	if(mw.expired()) {
-		_ctx->grab_stop(time);
-		return;
-	}
-
-	shared_ptr<viewport_t> new_viewport = _ctx->find_mouse_viewport(x, y);
-
-	if(new_viewport != v.lock()) {
-		if(new_viewport != nullptr) {
-//			pn0->move_resize(new_viewport->raw_area());
-			_ctx->schedule_repaint();
-		}
-		v = new_viewport;
-	}
-
-}
-
-void grab_fullscreen_client_t::button_release(ClutterEvent const * e)
-{
-	gfloat x, y;
-	clutter_event_get_coords(e, &x, &y);
-	auto button = clutter_event_get_button(e);
-	auto time = clutter_event_get_time(e);
-
-	if(mw.expired()) {
-		_ctx->grab_stop(time);
-		return;
-	}
-
-	if (this->button == button) {
-		/** drop the fullscreen window to the new viewport **/
-
-		auto new_viewport = _ctx->find_mouse_viewport(x, y);
-
-		if(new_viewport != nullptr) {
-			_ctx->move_fullscreen_to_viewport(mw.lock(), new_viewport);
-		}
-
-		_ctx->grab_stop(time);
-
-	}
-}
+//grab_fullscreen_client_t::grab_fullscreen_client_t(page_t * ctx, view_fullscreen_p mw, xcb_button_t button, int x, int y) :
+// grab_default_t{ctx},
+// mw{mw},
+// button{button}
+//{
+//	v = _ctx->find_mouse_viewport(x, y);
+//
+//}
+//
+//grab_fullscreen_client_t::~grab_fullscreen_client_t() {
+//
+//}
+//
+//void grab_fullscreen_client_t::button_press(ClutterEvent const * e) {
+//
+//}
+//
+//void grab_fullscreen_client_t::button_motion(ClutterEvent const * e)
+//{
+//	gfloat x, y;
+//	clutter_event_get_coords(e, &x, &y);
+//	auto time = clutter_event_get_time(e);
+//
+//	if(mw.expired()) {
+//		_ctx->grab_stop(time);
+//		return;
+//	}
+//
+//	shared_ptr<viewport_t> new_viewport = _ctx->find_mouse_viewport(x, y);
+//
+//	if(new_viewport != v.lock()) {
+//		if(new_viewport != nullptr) {
+////			pn0->move_resize(new_viewport->raw_area());
+//			_ctx->schedule_repaint();
+//		}
+//		v = new_viewport;
+//	}
+//
+//}
+//
+//void grab_fullscreen_client_t::button_release(ClutterEvent const * e)
+//{
+//	gfloat x, y;
+//	clutter_event_get_coords(e, &x, &y);
+//	auto button = clutter_event_get_button(e);
+//	auto time = clutter_event_get_time(e);
+//
+//	if(mw.expired()) {
+//		_ctx->grab_stop(time);
+//		return;
+//	}
+//
+//	if (this->button == button) {
+//		/** drop the fullscreen window to the new viewport **/
+//
+//		auto new_viewport = _ctx->find_mouse_viewport(x, y);
+//
+//		if(new_viewport != nullptr) {
+//			_ctx->move_fullscreen_to_viewport(mw.lock(), new_viewport);
+//		}
+//
+//		_ctx->grab_stop(time);
+//
+//	}
+//}
 
 void grab_alt_tab_t::_destroy_client(client_managed_t * c) {
 	_destroy_func_map.erase(c);

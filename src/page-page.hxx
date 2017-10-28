@@ -363,7 +363,6 @@ public:
 	auto theme() const -> theme_t const *;
 	auto dpy() const -> MetaDisplay *;
 	void overlay_add(shared_ptr<tree_t> x);
-	auto find_mouse_viewport(int x, int y) const -> viewport_p;
 	auto current_workspace() const -> workspace_p const &;
 	auto get_workspace(int id) const -> workspace_p const &;
 	int  get_workspace_count() const;

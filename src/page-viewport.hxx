@@ -31,12 +31,8 @@ class viewport_t:
 	ClutterContent * _canvas;
 	ClutterActor * _default_view;
 
-	/** area without considering dock windows **/
-	rect _raw_aera;
-
-	/** area considering dock windows **/
-	rect _effective_area;
-	rect _page_area;
+	/** the viewport work area **/
+	rect _work_area;
 
 	shared_ptr<page_component_t> _subtree;
 
@@ -44,12 +40,10 @@ class viewport_t:
 	viewport_t & operator= (viewport_t const &) = delete;
 
 	auto get_nearest_notebook() -> shared_ptr<notebook_t>;
-	void set_effective_area(rect const & area);
-	auto page_area() const -> rect const &;
 
-	void update_renderable();
 	void draw(ClutterCanvas * _, cairo_t * cr, int width, int height);
-	void paint_expose();
+
+	void _update_canvas();
 
 	auto _handler_button_press_event(ClutterActor * actor, ClutterEvent * event) -> gboolean;
 	auto _handler_button_release_event(ClutterActor * actor, ClutterEvent * event) -> gboolean;
@@ -62,8 +56,7 @@ public:
 	viewport_t(tree_t * ref, rect const & area);
 	virtual ~viewport_t();
 
-	auto raw_area() const -> rect const &;
-	void set_raw_area(rect const & area);
+	void update_work_area(rect const & area);
 
 	/**
 	 * tree_t virtual API
@@ -84,8 +77,6 @@ public:
 	//virtual bool leave(xcb_leave_notify_event_t const * ev);
 	//virtual bool enter(xcb_enter_notify_event_t const * ev);
 
-	//virtual auto get_toplevel_xid() const -> xcb_window_t;
-	virtual rect get_window_position() const;
 	virtual void queue_redraw();
 
 	virtual auto get_default_view() const -> ClutterActor *;

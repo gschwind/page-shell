@@ -76,8 +76,8 @@ void view_fullscreen_t::reconfigure()
 	auto _dpy = _root->_ctx->dpy();
 
 
-	if(not _viewport.expired())
-		_client->_absolute_position = _viewport.lock()->raw_area();
+//	if(not _viewport.expired())
+//		_client->_absolute_position = _viewport.lock()->raw_area();
 
 	_base_position.x = _client->_absolute_position.x;
 	_base_position.y = _client->_absolute_position.y;

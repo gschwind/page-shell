@@ -181,22 +181,22 @@ public:
 
 };
 
-struct grab_fullscreen_client_t : public grab_default_t {
-	view_fullscreen_w mw;
-	weak_ptr<viewport_t> v;
-	xcb_button_t button;
-
-public:
-
-	grab_fullscreen_client_t(page_t * ctx, view_fullscreen_p mw, xcb_button_t button, int x, int y);
-
-	virtual ~grab_fullscreen_client_t();
-	virtual void button_press(ClutterEvent const * e) override;
-	virtual void button_motion(ClutterEvent const * e) override;
-	virtual void button_release(ClutterEvent const * e) override;
-	using grab_handler_t::key_press;
-	using grab_handler_t::key_release;
-};
+//struct grab_fullscreen_client_t : public grab_default_t {
+//	view_fullscreen_w mw;
+//	weak_ptr<viewport_t> v;
+//	xcb_button_t button;
+//
+//public:
+//
+//	grab_fullscreen_client_t(page_t * ctx, view_fullscreen_p mw, xcb_button_t button, int x, int y);
+//
+//	virtual ~grab_fullscreen_client_t();
+//	virtual void button_press(ClutterEvent const * e) override;
+//	virtual void button_motion(ClutterEvent const * e) override;
+//	virtual void button_release(ClutterEvent const * e) override;
+//	using grab_handler_t::key_press;
+//	using grab_handler_t::key_release;
+//};
 
 struct grab_alt_tab_t : public grab_default_t {
 	list<view_w> _client_list;
