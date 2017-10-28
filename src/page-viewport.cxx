@@ -166,6 +166,11 @@ void viewport_t::_update_canvas()
 	clutter_content_invalidate(_canvas);
 }
 
+rect viewport_t::get_window_position() const
+{
+	return _work_area;
+}
+
 /* mark renderable_page for redraw */
 void viewport_t::queue_redraw()
 {

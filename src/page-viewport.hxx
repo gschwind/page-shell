@@ -77,7 +77,8 @@ public:
 	//virtual bool leave(xcb_leave_notify_event_t const * ev);
 	//virtual bool enter(xcb_enter_notify_event_t const * ev);
 
-	virtual void queue_redraw();
+	virtual rect get_window_position() const override;
+	virtual void queue_redraw() override;
 
 	virtual auto get_default_view() const -> ClutterActor *;
 
