@@ -219,6 +219,7 @@ var LayoutManager = new Lang.Class({
                         });
 
         global.stage.remove_actor(global.window_group);
+        this.uiGroup.add_actor(global.viewports_layer);
         this.uiGroup.add_actor(global.window_group);
 
         global.stage.add_child(this.uiGroup);
@@ -265,7 +266,7 @@ var LayoutManager = new Lang.Class({
         this.uiGroup.add_actor(feedbackGroup);
 
         this._backgroundGroup = new Meta.BackgroundGroup();
-        global.window_group.add_child(this._backgroundGroup);
+        // global.window_group.add_child(this._backgroundGroup);
         this._backgroundGroup.lower_bottom();
         this._bgManagers = [];
 
