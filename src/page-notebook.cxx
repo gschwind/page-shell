@@ -835,6 +835,9 @@ auto notebook_t::button_press(ClutterEvent const * e) -> button_action_e
 	auto button = clutter_event_get_button(e);
 	gfloat x, y;
 	clutter_event_get_coords(e, &x, &y);
+	auto winpos = get_window_position();
+	x -= winpos.x;
+	y -= winpos.y;
 	auto time = clutter_event_get_time(e);
 
 	log::printf("button_press_event time = %u, x = %f, y = %f, button = 0x%x\n", time, x, y, button);
@@ -1053,8 +1056,14 @@ void notebook_t::_update_mouse_over(int x, int y) {
 
 bool notebook_t::button_motion(ClutterEvent const * e)
 {
+	log::printf("call %s\n", __PRETTY_FUNCTION__);
 	gfloat x, y;
 	clutter_event_get_coords(e, &x, &y);
+	auto winpos = get_window_position();
+	x -= winpos.x;
+	y -= winpos.y;
+	log::printf("x = %f, y = %f\n", x, y);
+
 	auto time = clutter_event_get_time(e);
 
 	_update_mouse_over(x, y);

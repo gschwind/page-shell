@@ -206,7 +206,7 @@ auto viewport_t::_handler_button_release_event(ClutterActor * actor, ClutterEven
 
 auto viewport_t::_handler_motion_event(ClutterActor * actor, ClutterEvent * event) -> gboolean
 {
-	//log::printf("call %s\n", __PRETTY_FUNCTION__);
+	log::printf("call %s\n", __PRETTY_FUNCTION__);
 
 	broadcast_button_motion(event);
 
