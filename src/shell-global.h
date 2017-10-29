@@ -27,6 +27,7 @@ GSettings     *shell_global_get_overrides_settings    (ShellGlobal *global);
 guint32        shell_global_get_current_time          (ShellGlobal *global);
 
 void           shell_global_set_viewports_layer       (ShellGlobal *global, ClutterActor *actor);
+void           shell_global_set_overlay_layer         (ShellGlobal *global, ClutterActor *actor);
 
 
 /* Input/event handling */

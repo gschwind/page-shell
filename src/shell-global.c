@@ -94,6 +94,7 @@ struct _ShellGlobal {
   gboolean frame_finish_timestamp;
 
   ClutterActor *viewports_layer;
+  ClutterActor *overlay_layer;
 };
 
 enum {
@@ -116,7 +117,8 @@ enum {
   PROP_FOCUS_MANAGER,
   PROP_FRAME_TIMESTAMPS,
   PROP_FRAME_FINISH_TIMESTAMP,
-  PROP_VIEWPORTS_LAYER
+  PROP_VIEWPORTS_LAYER,
+  PROP_OVERLAY_LAYER
 };
 
 /* Signals */
@@ -229,6 +231,9 @@ shell_global_get_property(GObject         *object,
       break;
     case PROP_VIEWPORTS_LAYER:
       g_value_set_object (value, global->viewports_layer);
+      break;
+    case PROP_OVERLAY_LAYER:
+      g_value_set_object (value, global->overlay_layer);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -504,6 +509,15 @@ shell_global_class_init (ShellGlobalClass *klass)
                                                         "Actor holding viewports actors",
                                                         CLUTTER_TYPE_ACTOR,
                                                         G_PARAM_READABLE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_OVERLAY_LAYER,
+                                   g_param_spec_object ("overlay-layer",
+                                                        "overlay Layer",
+                                                        "Actor holding overlay actors",
+                                                        CLUTTER_TYPE_ACTOR,
+                                                        G_PARAM_READABLE));
+
 }
 
 /*
@@ -1578,6 +1592,16 @@ shell_global_set_viewports_layer (ShellGlobal *global, ClutterActor *actor)
 	global->viewports_layer = actor;
 }
 
+/**
+ * shell_global_set_overlay_layer:
+ * @global: A #ShellGlobal
+ * @actor: The viewports layer.
+ */
+void
+shell_global_set_overlay_layer (ShellGlobal *global, ClutterActor *actor)
+{
+	global->overlay_layer = actor;
+}
 
 /**
  * shell_global_create_app_launch_context:

@@ -245,6 +245,8 @@ var LayoutManager = new Lang.Class({
         this.modalDialogGroup = new St.Widget({ name: 'modalDialogGroup',
                                                 layout_manager: new Clutter.BinLayout() });
         this.uiGroup.add_actor(this.modalDialogGroup);
+        
+        this.uiGroup.add_actor(global.overlay_layer);
 
         this.keyboardBox = new St.BoxLayout({ name: 'keyboardBox',
                                               reactive: true,

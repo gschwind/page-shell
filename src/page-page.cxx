@@ -369,15 +369,9 @@ void page_t::_handler_plugin_start()
 
 	log::printf("wndow-group = %p, xparent = %p, stage = %p\n", window_group, xparent, stage);
 	_viewport_group = clutter_actor_new();
-//	clutter_actor_insert_child_below(xparent, _viewport_group, window_group);
-//	//clutter_actor_insert_child_above(xparent, _viewport_group, NULL);
 	clutter_actor_show(_viewport_group);
 
 	_overlay_group = clutter_actor_new();
-	//clutter_actor_insert_child_above(xparent, _overlay_group, NULL);
-
-	// insert above all childs
-	clutter_actor_insert_child_above(xparent, _overlay_group, NULL);
 	clutter_actor_show(_overlay_group);
 
 	GSettings * setting_keybindings = g_settings_new("net.hzog.page.keybindings");
@@ -421,6 +415,7 @@ void page_t::_handler_plugin_start()
 
 	auto global = shell_global_get();
 	shell_global_set_viewports_layer(global, _viewport_group);
+	shell_global_set_overlay_layer(global, _overlay_group);
 
 }
 
