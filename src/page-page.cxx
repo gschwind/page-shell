@@ -56,8 +56,6 @@ extern "C" {
 #include "page-view-notebook.hxx"
 #include "page-view-floating.hxx"
 
-#include "page-popup-alt-tab.hxx"
-
 /* ICCCM definition */
 #define _NET_WM_STATE_REMOVE 0
 #define _NET_WM_STATE_ADD 1
@@ -655,15 +653,6 @@ auto page_t::_handler_stage_motion_event(ClutterActor * actor, ClutterEvent * ev
 	if (_grab_handler) {
 		_grab_handler->button_motion(event);
 		return TRUE;
-	} else {
-		gfloat x, y;
-		clutter_event_get_coords(event, &x, &y);
-		auto time = clutter_event_get_time(event);
-
-		if(x == 0.0 and y == 0.0) {
-			start_alt_tab(time);
-			return TRUE;
-		}
 	}
 
 	return FALSE;
@@ -1422,26 +1411,6 @@ void page_t::global_focus_history_move_front(view_p in) {
 bool page_t::global_focus_history_is_empty() {
 	_global_focus_history.remove_if([](view_w const & w) { return w.expired(); });
 	return _global_focus_history.empty();
-}
-
-void page_t::start_alt_tab(xcb_timestamp_t time) {
-	auto _x = current_workspace()->gather_children_root_first<view_rebased_t>();
-	list<view_p> managed_window{_x.begin(), _x.end()};
-
-	auto focus_history = current_workspace()->client_focus_history();
-	/* reorder client to follow focused order */
-	for (auto i = focus_history.rbegin(); i != focus_history.rend(); ++i) {
-		if(i->expired())
-			continue;
-		auto x = std::find(managed_window.begin(), managed_window.end(), i->lock());
-		if(x != managed_window.end()) {
-			managed_window.splice(managed_window.begin(), managed_window, x);
-		}
-	}
-
-	/* Grab keyboard */
-	grab_start(make_shared<grab_alt_tab_t>(this, managed_window, time), time);
-
 }
 
 auto page_t::conf() const -> page_configuration_t const & {

@@ -851,144 +851,144 @@ void grab_floating_resize_t::button_release(ClutterEvent const * e)
 //	}
 //}
 
-void grab_alt_tab_t::_destroy_client(client_managed_t * c) {
-	_destroy_func_map.erase(c);
-
-	_client_list.remove_if([](view_w const & x) -> bool { return x.expired(); });
-
-	for(auto & x: _popup_list) {
-		x->destroy_client(c);
-	}
-}
-
-grab_alt_tab_t::grab_alt_tab_t(page_t * ctx, list<view_p> managed_window, xcb_timestamp_t time) : grab_default_t{ctx} {
-	_client_list = weak(managed_window);
-
-	auto viewport_list = _ctx->current_workspace()->get_viewports();
-
-	for(auto v: viewport_list) {
-		auto pat = popup_alt_tab_t::create(v.get(), managed_window, v);
-		pat->show();
-		if(_client_list.size() > 0)
-			pat->selected(_client_list.front());
-		_ctx->overlay_add(pat);
-		_popup_list.push_back(pat);
-	}
-
-	if(_client_list.size() > 0) {
-		_selected = _client_list.front();
-	}
-
-}
-
-grab_alt_tab_t::~grab_alt_tab_t() {
-	for(auto x: _popup_list) {
-		_ctx->schedule_repaint();
-		x->detach_myself();
-	}
-}
-
-void grab_alt_tab_t::button_press(ClutterEvent const * e)
-{
-	auto button = clutter_event_get_button(e);
-	auto time = clutter_event_get_time(e);
-	if (button == 1) {
-		for(auto & pat: _popup_list) {
-			pat->grab_button_press(e);
-			auto _mw = pat->selected();
-			if(not _mw.expired()) {
-				auto mw = _mw.lock();
-				_ctx->activate(mw, time);
-				break;
-			}
-		}
-
-		_ctx->grab_stop(time);
-
-	}
-}
-
-void grab_alt_tab_t::button_motion(ClutterEvent const * e) {
-	for(auto & pat: _popup_list) {
-		pat->grab_button_motion(e);
-		auto _mw = pat->selected();
-		if(not _mw.expired()) {
-			_selected = _mw;
-		}
-	}
-}
-
-void grab_alt_tab_t::key_press(ClutterEvent const * e) {
-//	/* get KeyCode for Unmodified Key */
-//	xcb_keysym_t k = _ctx->keymap()->get(e->detail);
+//void grab_alt_tab_t::_destroy_client(client_managed_t * c) {
+//	_destroy_func_map.erase(c);
 //
-//	if (k == 0)
-//		return;
+//	_client_list.remove_if([](view_w const & x) -> bool { return x.expired(); });
 //
-//	/** XCB_MOD_MASK_2 is num_lock, thus ignore his state **/
-//	unsigned int state = e->state;
-//	if(_ctx->keymap()->numlock_mod_mask() != 0) {
-//		state &= ~(_ctx->keymap()->numlock_mod_mask());
+//	for(auto & x: _popup_list) {
+//		x->destroy_client(c);
+//	}
+//}
+//
+//grab_alt_tab_t::grab_alt_tab_t(page_t * ctx, list<view_p> managed_window, xcb_timestamp_t time) : grab_default_t{ctx} {
+//	_client_list = weak(managed_window);
+//
+//	auto viewport_list = _ctx->current_workspace()->get_viewports();
+//
+//	for(auto v: viewport_list) {
+//		auto pat = popup_alt_tab_t::create(v.get(), managed_window, v);
+//		pat->show();
+//		if(_client_list.size() > 0)
+//			pat->selected(_client_list.front());
+//		_ctx->overlay_add(pat);
+//		_popup_list.push_back(pat);
 //	}
 //
-//	if (k == XK_Tab and (state == XCB_MOD_MASK_1)) {
-//		if(_selected.expired()) {
-//			if(_client_list.size() > 0) {
-//				_selected = _client_list.front();
-//				for(auto & pat: _popup_list) {
-//					pat->selected(_selected);
-//				}
+//	if(_client_list.size() > 0) {
+//		_selected = _client_list.front();
+//	}
+//
+//}
+//
+//grab_alt_tab_t::~grab_alt_tab_t() {
+//	for(auto x: _popup_list) {
+//		_ctx->schedule_repaint();
+//		x->detach_myself();
+//	}
+//}
+//
+//void grab_alt_tab_t::button_press(ClutterEvent const * e)
+//{
+//	auto button = clutter_event_get_button(e);
+//	auto time = clutter_event_get_time(e);
+//	if (button == 1) {
+//		for(auto & pat: _popup_list) {
+//			pat->grab_button_press(e);
+//			auto _mw = pat->selected();
+//			if(not _mw.expired()) {
+//				auto mw = _mw.lock();
+//				_ctx->activate(mw, time);
+//				break;
 //			}
-//		} else {
-//			auto c = _selected.lock();
-//			_selected.reset();
-//			auto xc = std::find_if(_client_list.begin(), _client_list.end(),
-//				[c](view_w & x) -> bool { return c == x.lock(); });
+//		}
 //
-//			if(xc != _client_list.end())
-//				++xc;
-//			if(xc != _client_list.end()) {
-//				_selected = (*xc);
-//			}
+//		_ctx->grab_stop(time);
 //
-//			for(auto & pat: _popup_list) {
-//				pat->selected(_selected);
-//			}
+//	}
+//}
 //
-//			_ctx->schedule_repaint();
-//
+//void grab_alt_tab_t::button_motion(ClutterEvent const * e) {
+//	for(auto & pat: _popup_list) {
+//		pat->grab_button_motion(e);
+//		auto _mw = pat->selected();
+//		if(not _mw.expired()) {
+//			_selected = _mw;
 //		}
 //	}
-}
-
-void grab_alt_tab_t::key_release(ClutterEvent const * e) {
-//	/* get KeyCode for Unmodified Key */
-//	xcb_keysym_t k = _ctx->keymap()->get(e->detail);
+//}
 //
-//	if (k == 0)
-//		return;
+//void grab_alt_tab_t::key_press(ClutterEvent const * e) {
+////	/* get KeyCode for Unmodified Key */
+////	xcb_keysym_t k = _ctx->keymap()->get(e->detail);
+////
+////	if (k == 0)
+////		return;
+////
+////	/** XCB_MOD_MASK_2 is num_lock, thus ignore his state **/
+////	unsigned int state = e->state;
+////	if(_ctx->keymap()->numlock_mod_mask() != 0) {
+////		state &= ~(_ctx->keymap()->numlock_mod_mask());
+////	}
+////
+////	if (k == XK_Tab and (state == XCB_MOD_MASK_1)) {
+////		if(_selected.expired()) {
+////			if(_client_list.size() > 0) {
+////				_selected = _client_list.front();
+////				for(auto & pat: _popup_list) {
+////					pat->selected(_selected);
+////				}
+////			}
+////		} else {
+////			auto c = _selected.lock();
+////			_selected.reset();
+////			auto xc = std::find_if(_client_list.begin(), _client_list.end(),
+////				[c](view_w & x) -> bool { return c == x.lock(); });
+////
+////			if(xc != _client_list.end())
+////				++xc;
+////			if(xc != _client_list.end()) {
+////				_selected = (*xc);
+////			}
+////
+////			for(auto & pat: _popup_list) {
+////				pat->selected(_selected);
+////			}
+////
+////			_ctx->schedule_repaint();
+////
+////		}
+////	}
+//}
 //
-//	/** XCB_MOD_MASK_2 is num_lock, thus ignore his state **/
-//	unsigned int state = e->state;
-//	if(_ctx->keymap()->numlock_mod_mask() != 0) {
-//		state &= ~(_ctx->keymap()->numlock_mod_mask());
-//	}
+//void grab_alt_tab_t::key_release(ClutterEvent const * e) {
+////	/* get KeyCode for Unmodified Key */
+////	xcb_keysym_t k = _ctx->keymap()->get(e->detail);
+////
+////	if (k == 0)
+////		return;
+////
+////	/** XCB_MOD_MASK_2 is num_lock, thus ignore his state **/
+////	unsigned int state = e->state;
+////	if(_ctx->keymap()->numlock_mod_mask() != 0) {
+////		state &= ~(_ctx->keymap()->numlock_mod_mask());
+////	}
+////
+////	if (XK_Escape == k) {
+////		_ctx->grab_stop(e->time);
+////		return;
+////	}
+////
+////	/** here we guess Mod1 is bound to Alt **/
+////	if (XK_Alt_L == k or XK_Alt_R == k) {
+////		if(not _selected.expired()) {
+////			auto mw = _selected.lock();
+////			_ctx->activate(mw, e->time);
+////		}
+////		_ctx->grab_stop(e->time);
+////		return;
+////	}
 //
-//	if (XK_Escape == k) {
-//		_ctx->grab_stop(e->time);
-//		return;
-//	}
-//
-//	/** here we guess Mod1 is bound to Alt **/
-//	if (XK_Alt_L == k or XK_Alt_R == k) {
-//		if(not _selected.expired()) {
-//			auto mw = _selected.lock();
-//			_ctx->activate(mw, e->time);
-//		}
-//		_ctx->grab_stop(e->time);
-//		return;
-//	}
-
-}
+//}
 
 }

@@ -132,9 +132,6 @@ void notebook_t::_set_selected(view_notebook_p c) {
 	if(_selected == c and not c->is_iconic())
 		return;
 
-	_stop_exposay();
-	_start_fading();
-
 	if(_selected != nullptr and c != _selected) {
 		_selected->hide();
 	}
@@ -158,8 +155,6 @@ void notebook_t::_add_client_view(view_notebook_p vn, xcb_timestamp_t time)
 	connect(vn->_client->on_title_change, this, &notebook_t::_client_title_change);
 
 	update_client_position(vn);
-
-	_start_fading();
 
 	/* remove current selected */
 	if (_selected != nullptr) {
@@ -205,7 +200,6 @@ void notebook_t::update_client_position(view_notebook_p c) {
 
 void notebook_t::iconify_client(view_notebook_p x) {
 	if(_selected == x) {
-		_start_fading();
 		_selected->hide();
 		queue_redraw();
 	}
@@ -647,189 +641,6 @@ void notebook_t::_update_theme_notebook(theme_notebook_t & theme_notebook) {
 
 }
 
-//shared_ptr<pixmap_t> notebook_t::_render_to_pixmap() {
-//
-//	/**
-//	 * Create image of notebook as it was just before fading start
-//	 **/
-//	auto pix = make_shared<pixmap_t>(_ctx->dpy(), PIXMAP_RGB, _allocation.w, _allocation.h);
-//	cairo_surface_t * surf = pix->get_cairo_surface();
-//	cairo_t * cr = cairo_create(surf);
-//	cairo_save(cr);
-//	cairo_translate(cr, -_allocation.x, -_allocation.y);
-//	_ctx->theme()->render_notebook(cr, &_theme_notebook);
-//
-//	if(_theme_client_tabs.size() > 0) {
-//		pixmap_t * pix = new pixmap_t(_ctx->dpy(), PIXMAP_RGBA, _theme_client_tabs.back().position.x + 100, _ctx->theme()->notebook.tab_height);
-//		cairo_t * xcr = cairo_create(pix->get_cairo_surface());
-//
-//		cairo_set_operator(xcr, CAIRO_OPERATOR_SOURCE);
-//		cairo_set_source_rgba(xcr, 0.0, 0.0, 0.0, 0.0);
-//		cairo_paint(xcr);
-//
-//		_ctx->theme()->render_iconic_notebook(xcr, _theme_client_tabs);
-//		cairo_destroy(xcr);
-//
-//		cairo_save(cr);
-//		cairo_set_source_surface(cr, pix->get_cairo_surface(), _theme_client_tabs_area.x - _theme_client_tabs_offset, _theme_client_tabs_area.y);
-//		cairo_clip(cr, _theme_client_tabs_area);
-//		cairo_paint(cr);
-//
-//		cairo_restore(cr);
-//		delete pix;
-//	}
-//
-//	cairo_restore(cr);
-//
-//	/* paste the current window */
-//	if (_selected != nullptr) {
-//		if (not _selected->is_iconic()) {
-//			auto client_view = _selected->create_surface();
-//			shared_ptr<pixmap_t> pix = client_view->get_pixmap();
-//			if (pix != nullptr) {
-//				rect pos = _client_position;
-//				rect cl { pos.x-_allocation.x, pos.y-_allocation.y, pos.w, pos.h };
-//
-//				cairo_reset_clip(cr);
-//				cairo_clip(cr, cl);
-//				cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-//				cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 0.0);
-//				cairo_set_source_surface(cr, pix->get_cairo_surface(), cl.x, cl.y);
-//				cairo_mask_surface(cr, pix->get_cairo_surface(), cl.x, cl.y);
-//
-//			}
-//		}
-//	}
-//
-//	cairo_destroy(cr);
-//	cairo_surface_flush(surf);
-//
-//	return pix;
-//}
-
-void notebook_t::_start_fading() {
-
-//	if(_ctx->cmp() == nullptr)
-//		return;
-//
-//	if(fading_notebook == nullptr) {
-//		_swap_start.update_to_current_time();
-//		auto pix = _render_to_pixmap();
-//		rect pos = to_root_position(_allocation);
-//		fading_notebook = make_shared<renderable_notebook_fading_t>(this, pix, pos.x, pos.y);
-//		_fading_notebook_layer->push_back(fading_notebook);
-//		fading_notebook->show();
-//		_ctx->schedule_repaint();
-//		xcb_flush(_ctx->_dpy->xcb());
-//	} else {
-//		_swap_start.update_to_current_time();
-//
-//		auto pix = _render_to_pixmap();
-//		auto surf = pix->get_cairo_surface();
-//		auto cr = cairo_create(surf);
-//		auto surf_src = fading_notebook->surface()->get_cairo_surface();
-//
-//		cairo_pattern_t * p0 =
-//				cairo_pattern_create_rgba(1.0, 1.0, 1.0, 1.0 - fading_notebook->ratio());
-//		cairo_set_source_surface(cr, surf_src, 0.0, 0.0);
-//		cairo_mask(cr, p0);
-//		cairo_pattern_destroy(p0);
-//		cairo_destroy(cr);
-//
-//		rect pos = to_root_position(_allocation);
-//		fading_notebook->update_pixmap(pix, pos.x, pos.y);
-//		_ctx->schedule_repaint();
-//		xcb_flush(_ctx->_dpy->xcb());
-//	}
-
-}
-
-void notebook_t::start_exposay() {
-	if(_selected != nullptr) {
-		iconify_client(_selected);
-		_selected = nullptr;
-	}
-
-	_exposay = true;
-	queue_redraw();
-}
-
-void notebook_t::_update_exposay() {
-	_exposay_buttons.clear();
-	_exposay_thumbnail.clear();
-
-	_theme_notebook.button_mouse_over = NOTEBOOK_BUTTON_NONE;
-	_mouse_over.tab = nullptr;
-	_mouse_over.exposay = nullptr;
-
-	if(not _exposay)
-		return;
-
-	if(_clients_tab_order.size() <= 0)
-		return;
-
-	unsigned clients_counts = _clients_tab_order.size();
-
-	/*
-	 * n is the number of column and m is the number of line of exposay.
-	 * Since most window are the size of client_area, we known that n*m will produce n = m
-	 * thus use square root to get n
-	 */
-	int n = static_cast<int>(ceil(sqrt(static_cast<double>(clients_counts))));
-	/* the square root may produce to much line (or column depend on the point of view
-	 * We choose to remove the exide of line, but we could prefer to remove column,
-	 * maybe later we will choose to select this on client_area.h/client_area.w ratio
-	 *
-	 *
-	 * /!\ This equation use the properties of integer division.
-	 *
-	 * we want :
-	 *  if client_counts == Q*n => m = Q
-	 *  if client_counts == Q*n+R with R != 0 => m = Q + 1
-	 *
-	 *  within the equation :
-	 *   when client_counts == Q*n => (client_counts - 1)/n + 1 == (Q - 1) + 1 == Q
-	 *   when client_counts == Q*n + R => (client_counts - 1)/n + 1 == (Q*n+R-1)/n + 1
-	 *     => when R == 1: (Q*n+R-1)/n + 1 == Q*n/n+1 = Q + 1
-	 *     => when 1 < R <= n-1 => (Q*n+R-1)/n + 1 == Q*n/n + (R-1)/n + 1 with (R-1)/n always == 0
-	 *        then (client_counts - 1)/n + 1 == Q + 1
-	 *
-	 */
-	int m = ((clients_counts - 1) / n) + 1;
-
-	unsigned width = _client_area.w/n;
-	unsigned heigth = _client_area.h/m;
-	unsigned xoffset = (_client_area.w-width*n)/2.0 + _client_area.x;
-	unsigned yoffset = (_client_area.h-heigth*m)/2.0 + _client_area.y;
-
-	auto it = _clients_tab_order.begin();
-	for(int i = 0; i < _clients_tab_order.size(); ++i) {
-		unsigned y = i / n;
-		unsigned x = i % n;
-
-		if(y == m-1)
-			xoffset = (_client_area.w-width*n)/2.0 + _client_area.x
-				+ (n*m - _clients_tab_order.size())*width/2.0;
-
-		rect pdst(x*width+1.0+xoffset+8, y*heigth+1.0+yoffset+8, width-2.0-16, heigth-2.0-16);
-		_exposay_buttons.push_back(make_tuple(pdst, view_notebook_w{*it}, i));
-		pdst = to_root_position(pdst);
-		auto thumbnail = make_shared<renderable_thumbnail_t>(this, (*it), pdst, ANCHOR_CENTER);
-		_exposay_thumbnail.push_back(thumbnail);
-		thumbnail->show();
-		++it;
-	}
-
-}
-
-void notebook_t::_stop_exposay() {
-	_exposay = false;
-	_mouse_over.exposay = nullptr;
-	_exposay_buttons.clear();
-	_exposay_thumbnail.clear();
-	queue_redraw();
-}
-
 auto notebook_t::button_press(ClutterEvent const * e) -> button_action_e
 {
 	auto button = clutter_event_get_button(e);
@@ -859,7 +670,6 @@ auto notebook_t::button_press(ClutterEvent const * e) -> button_action_e
 			_root->set_default_pop(shared_from_this());
 			return BUTTON_ACTION_GRAB_ASYNC;
 		} else if (_area.button_exposay.is_inside(x, y)) {
-			start_exposay();
 			return BUTTON_ACTION_GRAB_ASYNC;
 		} else if (_area.close_client.is_inside(x, y)) {
 			if(_selected != nullptr)
@@ -1090,15 +900,6 @@ void notebook_t::_mouse_over_reset() {
 			std::get<2>(*_mouse_over.tab)->tab_color =
 					_ctx->theme()->get_normal_color();
 		}
-
-		if (tooltips != nullptr) {
-			_tooltips_layer->remove(tooltips);
-			tooltips = nullptr;
-		}
-	}
-
-	if(_mouse_over.exposay != nullptr) {
-		_exposay_thumbnail[std::get<2>(*_mouse_over.exposay)]->set_mouse_over(false);
 	}
 
 	_theme_notebook.button_mouse_over = NOTEBOOK_BUTTON_NONE;
@@ -1110,27 +911,6 @@ void notebook_t::_mouse_over_reset() {
 void notebook_t::_mouse_over_set() {
 	if (_mouse_over.tab != nullptr) {
 		std::get<2>(*_mouse_over.tab)->tab_color = _ctx->theme()->get_mouse_over_color();
-
-		rect tab_pos = to_root_position(std::get<0>(*_mouse_over.tab));
-
-		rect pos;
-		pos.x = tab_pos.x + tab_pos.w - 256;
-		pos.y = tab_pos.y + tab_pos.h;
-		pos.w = 256;
-		pos.h = 256;
-
-		if(std::get<1>(*_mouse_over.tab).lock() != _selected and not std::get<1>(*_mouse_over.tab).expired()) {
-//			tooltips = make_shared<renderable_thumbnail_t>(this, std::get<1>(*_mouse_over.tab).lock(), pos, ANCHOR_TOP_RIGHT);
-//			_tooltips_layer->push_back(tooltips);
-//			tooltips->show();
-//			tooltips->set_mouse_over(true);
-		}
-	}
-
-	if(_mouse_over.exposay != nullptr) {
-		_exposay_thumbnail[std::get<2>(*_mouse_over.exposay)]->set_mouse_over(true);
-	} else {
-
 	}
 }
 
@@ -1138,12 +918,6 @@ void notebook_t::_client_title_change(client_managed_t * c) {
 	for(auto & x: _client_buttons) {
 		if(c == std::get<1>(x).lock()->_client.get()) {
 			std::get<2>(x)->title = c->title();
-		}
-	}
-
-	for(auto & x: _exposay_buttons) {
-		if(c == std::get<1>(x).lock()->_client.get()) {
-			_exposay_thumbnail[std::get<2>(x)]->update_title();
 		}
 	}
 

@@ -11,7 +11,6 @@
 #include "page-split.hxx"
 #include "page-workspace.hxx"
 #include "page-popup-split.hxx"
-#include "page-popup-alt-tab.hxx"
 
 
 namespace page {
@@ -198,27 +197,27 @@ public:
 //	using grab_handler_t::key_release;
 //};
 
-struct grab_alt_tab_t : public grab_default_t {
-	list<view_w> _client_list;
-	list<popup_alt_tab_p> _popup_list;
-
-	map<client_managed_t *, signal_handler_t> _destroy_func_map;
-
-	view_w _selected;
-
-	void _destroy_client(client_managed_t * c);
-
-public:
-
-	grab_alt_tab_t(page_t * ctx, list<view_p> managed_window, xcb_timestamp_t time);
-
-	virtual ~grab_alt_tab_t();
-	virtual void button_press(ClutterEvent const * e) override;
-	virtual void button_motion(ClutterEvent const * e) override;
-	using grab_handler_t::button_release;
-	virtual void key_press(ClutterEvent const * ev) override;
-	virtual void key_release(ClutterEvent const * ev) override;
-};
+//struct grab_alt_tab_t : public grab_default_t {
+//	list<view_w> _client_list;
+//	list<popup_alt_tab_p> _popup_list;
+//
+//	map<client_managed_t *, signal_handler_t> _destroy_func_map;
+//
+//	view_w _selected;
+//
+//	void _destroy_client(client_managed_t * c);
+//
+//public:
+//
+//	grab_alt_tab_t(page_t * ctx, list<view_p> managed_window, xcb_timestamp_t time);
+//
+//	virtual ~grab_alt_tab_t();
+//	virtual void button_press(ClutterEvent const * e) override;
+//	virtual void button_motion(ClutterEvent const * e) override;
+//	using grab_handler_t::button_release;
+//	virtual void key_press(ClutterEvent const * ev) override;
+//	virtual void key_release(ClutterEvent const * ev) override;
+//};
 
 }
 

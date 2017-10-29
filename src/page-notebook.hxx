@@ -19,7 +19,6 @@
 
 #include "page-page-component.hxx"
 #include "page-client-managed.hxx"
-#include "page-renderable-thumbnail.hxx"
 #include "page-dropdown-menu.hxx"
 #include "page-page-types.hxx"
 
@@ -38,9 +37,6 @@ class notebook_t : public page_component_t {
 	rect _allocation;
 
 	time64_t _swap_start;
-
-	shared_ptr<renderable_thumbnail_t> tooltips;
-	vector<renderable_thumbnail_p> _exposay_thumbnail;
 
 	tree_p _notebook_view_layer;
 	tree_p _fading_notebook_layer;
@@ -114,8 +110,6 @@ class notebook_t : public page_component_t {
 	vector<tuple<rect, view_notebook_w, theme_tab_t *>> _client_buttons;
 	vector<tuple<rect, view_notebook_w, int>> _exposay_buttons;
 
-	void _start_fading();
-
 	void _update_notebook_buttons_area();
 	void _update_theme_notebook(theme_notebook_t & theme_notebook);
 	void _update_all_layout();
@@ -150,8 +144,6 @@ class notebook_t : public page_component_t {
 
 	bool _has_client(client_managed_p c);
 
-	void _update_exposay();
-	void _stop_exposay();
 	void _start_client_menu(view_notebook_p c, xcb_button_t button, gfloat x, gfloat y, xcb_timestamp_t time);
 
 	void _scroll_left(int x);
@@ -205,7 +197,6 @@ public:
 	 **/
 	void set_default(bool x);
 	void render_legacy(cairo_t * cr);
-	void start_exposay();
 	void update_client_position(view_notebook_p c);
 	void iconify_client(view_notebook_p x);
 	bool add_client(client_managed_p c, xcb_timestamp_t time);

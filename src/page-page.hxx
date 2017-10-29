@@ -31,7 +31,6 @@ extern "C" {
 
 #include "page-client-managed.hxx"
 
-#include "page-popup-alt-tab.hxx"
 #include "page-popup-split.hxx"
 
 #include "page-dropdown-menu.hxx"
@@ -341,8 +340,6 @@ public:
 	void start_compositor();
 	void stop_compositor();
 	void run_cmd(string const & cmd_with_args);
-
-	void start_alt_tab(xcb_timestamp_t time);
 
 	void reconfigure_docks(shared_ptr<workspace_t> const & d);
 
