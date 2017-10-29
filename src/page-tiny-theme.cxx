@@ -9,7 +9,6 @@
 
 #include <cairo-xcb.h>
 
-#include "page-renderable-solid.hxx"
 #include "page-tiny-theme.hxx"
 #include "page-box.hxx"
 #include "page-color.hxx"

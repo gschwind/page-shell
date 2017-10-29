@@ -1436,7 +1436,6 @@ void page_t::sync_tree_view()
 	}
 
 	auto window_group = meta_get_window_group_for_screen(_screen);
-//        clutter_actor_raise(_viewport_group, NULL);
 	auto children = current_workspace()->gather_children_root_first<view_t>();
 	log::printf("found %lu children\n", children.size());
 	for(auto x: children) {
@@ -1444,7 +1443,6 @@ void page_t::sync_tree_view()
 		meta_window_raise(x->_client->meta_window());
 		meta_window_actor_sync_visibility(x->_client->meta_window_actor());
 	}
-//        clutter_actor_raise(_overlay_group, NULL);
 
 	guard = false;
 

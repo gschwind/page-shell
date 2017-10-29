@@ -12,7 +12,6 @@
 #include <algorithm>
 #include <iostream>
 
-#include "page-renderable-solid.hxx"
 #include "page-simple2-theme.hxx"
 #include "page-box.hxx"
 #include "page-color.hxx"

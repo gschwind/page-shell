@@ -365,7 +365,7 @@ void workspace_t::switch_floating_to_fullscreen(view_floating_p vx, xcb_timestam
 	if(is_enable())
 		vf->acquire_client();
 	vf->revert_type = MANAGED_FLOATING;
-	_insert_view_fullscreen(vf, time);
+	add_fullscreen(vf);
 }
 
 void workspace_t::switch_floating_to_notebook(view_floating_p vf, xcb_timestamp_t time)
@@ -550,28 +550,6 @@ auto workspace_t::_find_viewport_of(tree_p t) -> viewport_p {
 	}
 
 	return nullptr;
-}
-
-void workspace_t::_insert_view_fullscreen(view_fullscreen_p vf, xcb_timestamp_t time)
-{
-//	auto viewport = vf->_viewport.lock();
-//	auto workspace = viewport->workspace();
-//
-//	// unfullscreen client that already use this viewport
-////	for (auto &x : workspace->gather_children_root_first<view_fullscreen_t>()) {
-////		if(x->_viewport.lock() == viewport)
-////			switch_fullscreen_to_prefered_view_mode(x, XCB_CURRENT_TIME);
-////	}
-//
-//	//meta_window_make_fullscreen(vf->_client->meta_window());
-//	workspace->add_fullscreen(vf);
-//	//vf->show();
-//
-//	/* hide the viewport because he is covered by the fullscreen client */
-//	//viewport->hide();
-//
-//	//workspace->set_focus(vf, time);
-//	_ctx->sync_tree_view();
 }
 
 void workspace_t::_insert_view_floating(view_floating_p fv, xcb_timestamp_t time)

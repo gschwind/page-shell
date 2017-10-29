@@ -58,6 +58,8 @@ void view_fullscreen_t::reconfigure()
 		return;
 
 	if (_root->is_enable() and _is_visible) {
+		if (meta_window_is_tiled_with_custom_position(_client->meta_window()))
+			meta_window_unmake_tiled_with_custom_position(_client->meta_window());
 		if (not meta_window_is_fullscreen(_client->meta_window()))
 			meta_window_make_fullscreen(_client->meta_window());
 	} else {
