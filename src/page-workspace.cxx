@@ -469,21 +469,6 @@ shared_ptr<viewport_t> workspace_t::primary_viewport() const {
 	return _primary_viewport.lock();
 }
 
-auto workspace_t::get_visible_region() -> region {
-	/** workspace do not render any thing **/
-	return region{};
-}
-
-auto workspace_t::get_opaque_region() -> region {
-	/** workspace do not render any thing **/
-	return region{};
-}
-
-auto workspace_t::get_damaged() -> region {
-	/** workspace do not render any thing **/
-	return region{};
-}
-
 auto workspace_t::client_focus_history() -> list<view_w>
 {
 	return _client_focus_history;

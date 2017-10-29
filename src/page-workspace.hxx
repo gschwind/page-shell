@@ -130,7 +130,6 @@ public:
 	void unmanage(client_managed_p mw);
 
 	auto _find_viewport_of(tree_p t) -> viewport_p;
-	void _insert_view_fullscreen(view_fullscreen_p vf, xcb_timestamp_t time);
 	void _insert_view_floating(view_floating_p view, xcb_timestamp_t time);
 
 	/**
@@ -145,10 +144,6 @@ public:
 	using tree_t::reconfigure;
 	using tree_t::on_workspace_enable;
 	using tree_t::on_workspace_disable;
-
-	virtual auto get_opaque_region() -> region;
-	virtual auto get_visible_region() -> region;
-	virtual auto get_damaged() -> region;
 
 	//virtual auto button_press(xcb_button_press_event_t const * ev)  -> button_action_e;
 	//virtual auto button_release(xcb_button_release_event_t const * ev)  -> button_action_e;
