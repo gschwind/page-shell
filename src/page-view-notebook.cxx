@@ -121,6 +121,8 @@ void view_notebook_t::remove_this_view()
 void view_notebook_t::set_focus_state(bool is_focused)
 {
 	view_rebased_t::set_focus_state(is_focused);
+	if (is_focused)
+		parent_notebook()->activate(shared_from_this(), 0);
 	parent_notebook()->_client_focus_change(_client.get());
 }
 
