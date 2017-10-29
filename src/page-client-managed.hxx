@@ -49,6 +49,11 @@ struct client_managed_t :
 	MetaWindowActor * _meta_window_actor;
 	MetaWindow * _meta_window;
 
+	managed_window_type_e revert_type;
+
+	/** prefered notebook to revert if available **/
+	notebook_w revert_notebook;
+
 	/**
 	 * hold floating position of the client window relative to root window,
 	 * even if rebased to another window. This used as default floating position
@@ -63,7 +68,7 @@ struct client_managed_t :
 	 **/
 	rect _absolute_position;
 
-	view_t * _current_owner_view;
+	view_w _current_owner_view;
 
 	/* private to avoid copy */
 	client_managed_t(client_managed_t const &) = delete;

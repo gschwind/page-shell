@@ -39,12 +39,18 @@ client_managed_t::client_managed_t(page_t * ctx, MetaWindowActor * actor) :
 	_floating_wished_position = pos;
 	_absolute_position = pos;
 
-	g_connect(_meta_window, "focus", &client_managed_t::_handler_meta_window_focus);
-	g_connect(_meta_window, "position-changed", &client_managed_t::_handler_meta_window_position_changed);
-	g_connect(_meta_window, "raised", &client_managed_t::_handler_meta_window_raised);
-	g_connect(_meta_window, "size-changed", &client_managed_t::_handler_meta_window_size_changed);
-	g_connect(_meta_window, "unmanaged", &client_managed_t::_handler_meta_window_unmanaged);
-	g_connect(_meta_window, "workspace-changed", &client_managed_t::_handler_meta_window_workspace_changed);
+	g_connect(_meta_window, "focus",
+			&client_managed_t::_handler_meta_window_focus);
+	g_connect(_meta_window, "position-changed",
+			&client_managed_t::_handler_meta_window_position_changed);
+	g_connect(_meta_window, "raised",
+			&client_managed_t::_handler_meta_window_raised);
+	g_connect(_meta_window, "size-changed",
+			&client_managed_t::_handler_meta_window_size_changed);
+	g_connect(_meta_window, "unmanaged",
+			&client_managed_t::_handler_meta_window_unmanaged);
+	g_connect(_meta_window, "workspace-changed",
+			&client_managed_t::_handler_meta_window_workspace_changed);
 }
 
 client_managed_t::~client_managed_t()

@@ -40,11 +40,17 @@ viewport_t::viewport_t(tree_t * ref, rect const & area) :
 	_update_canvas();
 
 	g_connect(CLUTTER_CANVAS(_canvas), "draw", &viewport_t::draw);
-	g_connect(CLUTTER_ACTOR(_default_view), "button-press-event", &viewport_t::_handler_button_press_event);
-	g_connect(CLUTTER_ACTOR(_default_view), "button-release-event", &viewport_t::_handler_button_release_event);
-	g_connect(CLUTTER_ACTOR(_default_view), "motion-event", &viewport_t::_handler_motion_event);
-	g_connect(CLUTTER_ACTOR(_default_view), "enter-event", &viewport_t::_handler_enter_event);
-	g_connect(CLUTTER_ACTOR(_default_view), "leave-event", &viewport_t::_handler_leave_event);
+
+	g_connect(_default_view, "button-press-event",
+			&viewport_t::_handler_button_press_event);
+	g_connect(_default_view, "button-release-event",
+			&viewport_t::_handler_button_release_event);
+	g_connect(_default_view, "motion-event",
+			&viewport_t::_handler_motion_event);
+	g_connect(_default_view, "enter-event",
+			&viewport_t::_handler_enter_event);
+	g_connect(_default_view, "leave-event",
+			&viewport_t::_handler_leave_event);
 
 	_subtree->set_allocation(rect(0, 0, _work_area.w, _work_area.h));
 }
@@ -186,7 +192,7 @@ auto viewport_t::get_default_view() const -> ClutterActor *
 
 auto viewport_t::_handler_button_press_event(ClutterActor * actor, ClutterEvent * event) -> gboolean
 {
-	log::printf("call %s\n", __PRETTY_FUNCTION__);
+//	log::printf("call %s\n", __PRETTY_FUNCTION__);
 
 	if (not _root->_ctx->has_grab_handler())
 		broadcast_button_press(event);
@@ -196,7 +202,7 @@ auto viewport_t::_handler_button_press_event(ClutterActor * actor, ClutterEvent 
 
 auto viewport_t::_handler_button_release_event(ClutterActor * actor, ClutterEvent * event) -> gboolean
 {
-	log::printf("call %s\n", __PRETTY_FUNCTION__);
+//	log::printf("call %s\n", __PRETTY_FUNCTION__);
 
 	if (not _root->_ctx->has_grab_handler())
 		broadcast_button_release(event);
@@ -206,7 +212,7 @@ auto viewport_t::_handler_button_release_event(ClutterActor * actor, ClutterEven
 
 auto viewport_t::_handler_motion_event(ClutterActor * actor, ClutterEvent * event) -> gboolean
 {
-	log::printf("call %s\n", __PRETTY_FUNCTION__);
+//	log::printf("call %s\n", __PRETTY_FUNCTION__);
 
 	broadcast_button_motion(event);
 
@@ -215,7 +221,7 @@ auto viewport_t::_handler_motion_event(ClutterActor * actor, ClutterEvent * even
 
 auto viewport_t::_handler_enter_event(ClutterActor * actor, ClutterEvent * event) -> gboolean
 {
-	log::printf("call %s\n", __PRETTY_FUNCTION__);
+//	log::printf("call %s\n", __PRETTY_FUNCTION__);
 
 	broadcast_enter(event);
 
@@ -224,7 +230,7 @@ auto viewport_t::_handler_enter_event(ClutterActor * actor, ClutterEvent * event
 
 auto viewport_t::_handler_leave_event(ClutterActor * actor, ClutterEvent * event) -> gboolean
 {
-	log::printf("call %s\n", __PRETTY_FUNCTION__);
+//	log::printf("call %s\n", __PRETTY_FUNCTION__);
 
 	broadcast_leave(event);
 

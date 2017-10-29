@@ -534,7 +534,9 @@ void page_t::_handler_plugin_map(ShellWM * wm, MetaWindowActor * window_actor)
 		g_connect(meta_window, "focus", &page_t::_handler_meta_window_focus);
 		g_connect(meta_window, "unmanaged", &page_t::_handler_window_unmanaged);
 
-		insert_as_notebook(mw, 0);
+		if (not meta_window_is_fullscreen(meta_window))
+			insert_as_notebook(mw, 0);
+
 		shell_wm_completed_map(wm, window_actor);
 	} else
 	        shell_wm_completed_map(wm, window_actor);
