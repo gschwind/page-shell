@@ -20,7 +20,7 @@ script_data.set('VERSION', meson.project_version())
 foreach tool : ['gnome-shell-extension-tool', 'gnome-shell-perf-tool']
   configure_file(
     input: tool + '.in',
-    output: tool,
+    output: 'page-' + tool,
     configuration: script_data,
     install_dir: bindir
   )
@@ -76,7 +76,7 @@ libshell_menu_no_gir_sources= [
   'gtkmenutracker.h'
 ]
 
-libshell_menu = library('gnome-shell-menu',
+libshell_menu = library('page-shell-menu',
   sources: libshell_menu_gir_sources + libshell_menu_no_gir_sources,
   dependencies: [gio_dep, clutter_dep],
   include_directories: conf_inc,
@@ -268,7 +268,7 @@ gnome.generate_gir(libshell,
   install: true
 )
 
-executable('gnome-shell', 'main.c',
+executable('page-shell', 'main.c',
   c_args: gnome_shell_cflags + [
     '-DMUTTER_TYPELIB_DIR="@0@"'.format(mutter_typelibdir)
   ],
@@ -279,7 +279,7 @@ executable('gnome-shell', 'main.c',
   install: true
 )
 
-executable('gnome-shell-extension-prefs',
+executable('page-shell-extension-prefs',
   'gnome-shell-extension-prefs.c', js_resources,
   c_args: gnome_shell_cflags,
   dependencies: gnome_shell_deps,
@@ -291,7 +291,7 @@ executable('gnome-shell-extension-prefs',
 
 
 if have_networkmanager
-  executable('gnome-shell-portal-helper',
+  executable('page-shell-portal-helper',
     'gnome-shell-portal-helper.c', js_resources,
     c_args: gnome_shell_cflags,
     dependencies: gnome_shell_deps,
@@ -303,7 +303,7 @@ if have_networkmanager
   )
 endif
 
-executable('gnome-shell-perf-helper', 'shell-perf-helper.c',
+executable('page-shell-perf-helper', 'shell-perf-helper.c',
   dependencies: [gtk_dep, gio_dep, m_dep],
   include_directories: [conf_inc],
   build_rpath: mutter_typelibdir,

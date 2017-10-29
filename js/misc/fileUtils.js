@@ -11,7 +11,7 @@ function collectFromDatadirs(subdir, includeUserDir, processFile) {
         dataDirs.unshift(GLib.get_user_data_dir());
 
     for (let i = 0; i < dataDirs.length; i++) {
-        let path = GLib.build_filenamev([dataDirs[i], 'gnome-shell', subdir]);
+        let path = GLib.build_filenamev([dataDirs[i], 'page-shell', subdir]);
         let dir = Gio.File.new_for_path(path);
 
         let fileEnum;

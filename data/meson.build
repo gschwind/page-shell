@@ -6,7 +6,7 @@ service_files = []
 
 if have_networkmanager
   desktop_files += 'org.gnome.Shell.PortalHelper.desktop'
-  service_files += 'org.gnome.Shell.PortalHelper.service'
+  #service_files += 'org.gnome.Shell.PortalHelper.service'
 endif
 
 desktopconf = configuration_data()
@@ -21,7 +21,7 @@ foreach desktop_file : desktop_files
       output: desktop_file + '.in',
       configuration: desktopconf
     ),
-    output: desktop_file,
+    output: 'page.' + desktop_file,
     po_dir: '../po',
     install: true,
     install_dir: desktopdir,
@@ -48,7 +48,7 @@ dbus_interfaces = [
   'org.gnome.ShellSearchProvider.xml',
   'org.gnome.ShellSearchProvider2.xml'
 ]
-install_data(dbus_interfaces, install_dir: ifacedir)
+#install_data(dbus_interfaces, install_dir: ifacedir)
 
 
 subdir('theme')
@@ -72,24 +72,24 @@ configure_file(
 )
 
 
-install_data('gnome-shell.portal', install_dir: portaldir)
-install_data('50-gnome-shell-system.xml', install_dir: keysdir)
+#install_data('gnome-shell.portal', install_dir: portaldir)
+#install_data('50-gnome-shell-system.xml', install_dir: keysdir)
 
 
-schemaconf = configuration_data()
-schemaconf.set('GETTEXT_PACKAGE', meson.project_name())
-schema = configure_file(
-  input: 'org.gnome.shell.gschema.xml.in',
-  output: 'org.gnome.shell.gschema.xml',
-  configuration: schemaconf,
-  install_dir: schemadir
-)
-
-# for unit tests - gnome.compile_schemas() only looks in srcdir
-custom_target('compile-schemas',
-  input: schema,
-  output: 'gschemas.compiled',
-  command: [find_program('glib-compile-schemas'), meson.current_build_dir()],
-  build_by_default: true)
-
-install_data('gnome-shell-overrides.convert', install_dir: convertdir)
+#schemaconf = configuration_data()
+#schemaconf.set('GETTEXT_PACKAGE', meson.project_name())
+#schema = configure_file(
+#  input: 'org.gnome.shell.gschema.xml.in',
+#  output: 'org.gnome.shell.gschema.xml',
+#  configuration: schemaconf,
+#  install_dir: schemadir
+#)
+#
+## for unit tests - gnome.compile_schemas() only looks in srcdir
+#custom_target('compile-schemas',
+#  input: schema,
+#  output: 'gschemas.compiled',
+#  command: [find_program('glib-compile-schemas'), meson.current_build_dir()],
+#  build_by_default: true)
+#
+#install_data('gnome-shell-overrides.convert', install_dir: convertdir)
