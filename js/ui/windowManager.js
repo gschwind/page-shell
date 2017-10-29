@@ -731,6 +731,8 @@ var WindowManager = new Lang.Class({
         this.allowKeybinding('switch-to-session-10', Shell.ActionMode.ALL);
         this.allowKeybinding('switch-to-session-11', Shell.ActionMode.ALL);
         this.allowKeybinding('switch-to-session-12', Shell.ActionMode.ALL);
+        
+        this.allowKeybinding('make-notebook-window', Shell.ActionMode.ALL);
 
         this.setCustomKeybindingHandler('switch-to-workspace-left',
                                         Shell.ActionMode.NORMAL |
