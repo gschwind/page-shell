@@ -68,7 +68,7 @@ struct client_managed_t :
 	 **/
 	rect _absolute_position;
 
-	view_w _current_owner_view;
+	view_t * _current_owner_view;
 
 	/* private to avoid copy */
 	client_managed_t(client_managed_t const &) = delete;
