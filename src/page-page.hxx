@@ -221,7 +221,7 @@ public:
 	void _handler_plugin_switch_workspace(ShellWM * wm, gint from, gint to, MetaMotionDirection direction);
 	void _handler_plugin_show_tile_preview(ShellWM * wm, MetaWindow * window, MetaRectangle *tile_rect, int tile_monitor_number);
 	void _handler_plugin_hide_tile_preview(ShellWM * wm);
-	void _handler_plugin_show_window_menu(ShellWM * wm, MetaWindow * window, MetaWindowMenuType menu, int x, int y);
+	void _handler_plugin_show_window_menu(ShellWM * wm, MetaWindow * window, MetaWindowMenuType menu, MetaRectangle * rect);
 	void _handler_plugin_show_window_menu_for_rect(ShellWM * wm, MetaWindow * window, MetaWindowMenuType menu, MetaRectangle * rect);
 	void _handler_plugin_kill_window_effects(ShellWM * wm, MetaWindowActor * actor);
 	void _handler_plugin_kill_switch_workspace(ShellWM * wm);

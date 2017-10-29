@@ -571,7 +571,7 @@ void page_t::_handler_plugin_hide_tile_preview(ShellWM * wm)
 	log::printf("call %s\n", __PRETTY_FUNCTION__);
 }
 
-void page_t::_handler_plugin_show_window_menu(ShellWM * wm, MetaWindow * window, MetaWindowMenuType menu, int x, int y)
+void page_t::_handler_plugin_show_window_menu(ShellWM * wm, MetaWindow * window, MetaWindowMenuType menu, MetaRectangle * rect)
 {
 	log::printf("call %s\n", __PRETTY_FUNCTION__);
 }
