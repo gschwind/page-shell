@@ -1,4 +1,4 @@
-project('gnome-shell', ['c', 'cpp'],
+project('page-shell', ['c', 'cpp'],
   version: '3.27.1',
   meson_version: '>= 0.42.0',
   license: 'GPLv2+',
@@ -143,6 +143,9 @@ else
 endif
 
 enable_plugin = get_option('enable-browser-plugin')
+
+# permanantly disable extension browser
+enable_plugin = false
 if enable_plugin
   json_glib_dep = dependency('json-glib-1.0', version: json_glib_req)
 

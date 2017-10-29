@@ -5,7 +5,7 @@ calendar_sources = [
   'calendar-sources.h'
 ]
 
-calendar_server = executable('gnome-shell-calendar-server', calendar_sources,
+calendar_server = executable('page-shell-calendar-server', calendar_sources,
   dependencies: [ecal_dep, eds_dep, gio_dep],
   include_directories: include_directories('..', '../..'),
   c_args: [
@@ -20,16 +20,16 @@ calendar_server = executable('gnome-shell-calendar-server', calendar_sources,
 
 service_file = 'org.gnome.Shell.CalendarServer.service'
 
-configure_file(
-  input: service_file + '.in',
-  output: service_file,
-  configuration: service_data,
-  install_dir: servicedir
-)
+#configure_file(
+#  input: service_file + '.in',
+#  output: service_file,
+#  configuration: service_data,
+#  install_dir: servicedir
+#)
 
-i18n.merge_file('evolution-calendar.desktop',
+i18n.merge_file('page-evolution-calendar.desktop',
   input: 'evolution-calendar.desktop.in',
-  output: 'evolution-calendar.desktop',
+  output: 'page-evolution-calendar.desktop',
   po_dir: '../../po',
   install: true,
   install_dir: desktopdir,

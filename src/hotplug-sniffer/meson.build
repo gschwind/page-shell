@@ -5,7 +5,7 @@ hotplug_sources = [
   'hotplug-sniffer.c'
 ]
 
-executable('gnome-shell-hotplug-sniffer', hotplug_sources,
+executable('page-shell-hotplug-sniffer', hotplug_sources,
   dependencies: [gio_dep, gdk_pixbuf_dep],
   include_directories: include_directories('../..'),
   install_dir: libexecdir,
@@ -14,9 +14,9 @@ executable('gnome-shell-hotplug-sniffer', hotplug_sources,
 
 service_file = 'org.gnome.Shell.HotplugSniffer.service'
 
-configure_file(
-  input: service_file + '.in',
-  output: service_file,
-  configuration: service_data,
-  install_dir: servicedir
-)
+#configure_file(
+#  input: service_file + '.in',
+#  output: service_file,
+#  configuration: service_data,
+#  install_dir: servicedir
+#)
