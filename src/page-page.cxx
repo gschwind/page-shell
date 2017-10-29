@@ -374,7 +374,7 @@ void page_t::_handler_plugin_start()
 	clutter_actor_show(_viewport_group);
 
 	_overlay_group = clutter_actor_new();
-//	clutter_actor_insert_child_above(window_group, _overlay_group, NULL);
+	//clutter_actor_insert_child_above(xparent, _overlay_group, NULL);
 
 	// insert above all childs
 	clutter_actor_insert_child_above(xparent, _overlay_group, NULL);
