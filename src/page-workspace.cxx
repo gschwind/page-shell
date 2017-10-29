@@ -24,56 +24,19 @@ using namespace std;
 
 time64_t const workspace_t::_switch_duration{0.5};
 
-void workspace_t::_fix_view_floating_position()
-{
-	region new_layout_region;
-	for(auto x: _viewport_outputs) {
-		new_layout_region += x->allocation();
-	}
-
-	int default_x = _viewport_outputs[0]->allocation().x
-			+ _ctx->_theme->floating.margin.left;
-	int default_y = _viewport_outputs[0]->allocation().y
-			+ _ctx->_theme->floating.margin.top;
-
-	// update position of floating managed clients to avoid offscreen
-	// floating window
-	for(auto x: gather_children_root_first<view_floating_t>()) {
-		auto r = x->_base_position;
-		/**
-		 * if the current window do not overlap any desktop move to
-		 * the center of an existing monitor
-		 **/
-		if((new_layout_region & r).empty()) {
-			r.x = default_x;
-			r.y = default_y;
-			x->_client->set_floating_wished_position(r);
-			x->reconfigure();
-		}
-	}
-}
 void workspace_t::_init()
 {
 	_stack_is_locked = true;
 
 	_viewport_layer = make_shared<tree_t>(this);
 	_floating_layer = make_shared<tree_t>(this);
-	_dock_layer = make_shared<tree_t>(this);
 	_fullscreen_layer = make_shared<tree_t>(this);
-	_tooltips_layer = make_shared<tree_t>(this);
-	_notification_layer = make_shared<tree_t>(this);
 	_overlays_layer = make_shared<tree_t>(this);
-	_unknown_layer = make_shared<tree_t>(this);
 
 	push_back(_viewport_layer);
 	push_back(_floating_layer);
-	push_back(_dock_layer);
 	push_back(_fullscreen_layer);
-	push_back(_tooltips_layer);
-	push_back(_notification_layer);
 	push_back(_overlays_layer);
-
-	push_back(_unknown_layer);
 
 	set_to_default_name();
 }
@@ -105,14 +68,7 @@ workspace_t::workspace_t(page_t * ctx, guint32 time) :
 
 workspace_t::~workspace_t()
 {
-	_viewport_layer.reset();
-	_floating_layer.reset();
-	_dock_layer.reset();
-	_fullscreen_layer.reset();
-	_tooltips_layer.reset();
-	_notification_layer.reset();
-	_overlays_layer.reset();
-	_unknown_layer.reset();
+
 }
 
 auto workspace_t::shared_from_this() -> workspace_p
@@ -177,12 +133,6 @@ void workspace_t::update_viewports_layout()
 
 	_primary_viewport = _viewport_outputs[0];
 
-//	for (auto x: _viewport_outputs) {
-//		_ctx->compute_viewport_allocation(shared_from_this(), x);
-//	}
-
-	_fix_view_floating_position();
-
 	// update visibility
 	if (_is_visible)
 		show();
@@ -193,13 +143,6 @@ void workspace_t::update_viewports_layout()
 
 void workspace_t::remove_viewport(viewport_p v)
 {
-	/* remove fullscreened clients if needed */
-	for (auto &x : gather_children_root_first<view_fullscreen_t>()) {
-		if (x->_viewport.lock() == v) {
-			switch_fullscreen_to_prefered_view_mode(x, XCB_CURRENT_TIME);
-			break;
-		}
-	}
 
 	/* Transfer clients to a valid notebook */
 	for (auto x : v->gather_children_root_first<view_notebook_t>()) {
@@ -321,13 +264,9 @@ void workspace_t::insert_as_fullscreen(shared_ptr<client_managed_t> mw, shared_p
 	//printf("call %s\n", __PRETTY_FUNCTION__);
 	assert(v != nullptr);
 
-	auto fv = make_shared<view_fullscreen_t>(mw, v);
+	auto fv = make_shared<view_fullscreen_t>(this, mw);
 	if(is_enable())
 		fv->acquire_client();
-
-	/* default: revert to default pop */
-	fv->revert_type = MANAGED_NOTEBOOK;
-	fv->revert_notebook.reset();
 
 	// unfullscreen client that already use this screen
 	for (auto & x : gather_children_root_first<view_fullscreen_t>()) {
@@ -405,12 +344,15 @@ void workspace_t::switch_notebook_to_fullscreen(view_notebook_p vn, xcb_timestam
 
 	auto client = vn->_client;
 	auto nbk = vn->parent_notebook();
+	auto vf = make_shared<view_fullscreen_t>(this, client);
 
-	client->release(vn.get());
-	client->revert_type = MANAGED_NOTEBOOK;
-	client->revert_notebook = nbk;
+	vf->revert_type = MANAGED_NOTEBOOK;
+	vf->revert_notebook = nbk;
 
 	nbk->remove_view_notebook(vn);
+
+	vf->acquire_client();
+	add_fullscreen(vf);
 	_ctx->sync_tree_view();
 }
 
@@ -419,7 +361,7 @@ void workspace_t::switch_floating_to_fullscreen(view_floating_p vx, xcb_timestam
 	log::printf("call %s\n", __PRETTY_FUNCTION__);
 	auto viewport = get_any_viewport();
 	vx->remove_this_view();
-	auto vf = make_shared<view_fullscreen_t>(vx.get(), viewport);
+	auto vf = make_shared<view_fullscreen_t>(this, vx->_client);
 	if(is_enable())
 		vf->acquire_client();
 	vf->revert_type = MANAGED_FLOATING;
@@ -436,10 +378,6 @@ void workspace_t::switch_fullscreen_to_floating(view_fullscreen_p view, xcb_time
 {
 	view->remove_this_view();
 
-	if(is_visible() and not view->_viewport.expired()) {
-		view->_viewport.lock()->show();
-	}
-
 	//meta_window_unmake_fullscreen(view->_client->_meta_window);
 	auto fv = make_shared<view_floating_t>(view.get());
 	_insert_view_floating(fv, time);
@@ -448,10 +386,6 @@ void workspace_t::switch_fullscreen_to_floating(view_fullscreen_p view, xcb_time
 void workspace_t::switch_fullscreen_to_notebook(view_fullscreen_p view, xcb_timestamp_t time)
 {
 	view->remove_this_view();
-
-	if(is_visible() and not view->_viewport.expired()) {
-		view->_viewport.lock()->show();
-	}
 
 	auto n = ensure_default_notebook();
 	if(not view->revert_notebook.expired()) {
@@ -496,40 +430,19 @@ void workspace_t::switch_fullscreen_to_prefered_view_mode(view_fullscreen_p view
 	_ctx->sync_tree_view();
 }
 
-
-void workspace_t::add_dock(shared_ptr<tree_t> c)
-{
-	_dock_layer->push_back(c);
-}
-
-void workspace_t::add_floating(shared_ptr<tree_t> c)
+void workspace_t::add_floating(tree_p c)
 {
 	_floating_layer->push_back(c);
 }
 
-void workspace_t::add_fullscreen(shared_ptr<tree_t> c)
+void workspace_t::add_fullscreen(tree_p c)
 {
 	_fullscreen_layer->push_back(c);
 }
 
-void workspace_t::add_overlay(shared_ptr<tree_t> t)
+void workspace_t::add_overlay(tree_p t)
 {
 	_overlays_layer->push_back(t);
-}
-
-void workspace_t::add_unknown(shared_ptr<tree_t> c)
-{
-	_unknown_layer->push_back(c);
-}
-
-void workspace_t::add_tooltips(shared_ptr<tree_t> t)
-{
-	_tooltips_layer->push_back(t);
-}
-
-void workspace_t::add_notification(shared_ptr<tree_t> t)
-{
-	_notification_layer->push_back(t);
 }
 
 void workspace_t::set_name(string const & s) {

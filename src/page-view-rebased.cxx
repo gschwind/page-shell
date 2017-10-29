@@ -36,9 +36,7 @@ view_rebased_t::view_rebased_t(tree_t * ref, client_managed_p client) :
 }
 
 view_rebased_t::view_rebased_t(view_rebased_t * src) :
-	view_t{src->_root, src->_client},
-	_base_position{src->_base_position},
-	_orig_position{src->_orig_position}
+	view_t{src->_root, src->_client}
 {
 
 }

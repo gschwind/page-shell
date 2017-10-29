@@ -26,19 +26,19 @@
 
 namespace page {
 
-struct view_fullscreen_t : public view_rebased_t {
+struct view_fullscreen_t :
+		public view_rebased_t
+{
 
-	viewport_w _viewport;
 	managed_window_type_e revert_type;
+
+	/** prefered notebook to revert if available **/
 	notebook_w revert_notebook;
 
-	view_fullscreen_t(client_managed_p client, viewport_p viewport);
-	view_fullscreen_t(view_rebased_t * src, viewport_p viewport);
+	view_fullscreen_t(tree_t * ref, client_managed_p client);
 	virtual ~view_fullscreen_t();
 
 	auto shared_from_this() -> view_fullscreen_p;
-
-	void _on_configure_request(client_managed_t * c, xcb_configure_request_event_t const * e);
 
 	/**
 	 * view_t API

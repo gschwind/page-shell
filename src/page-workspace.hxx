@@ -41,13 +41,8 @@ private:
 
 	tree_p _viewport_layer;
 	tree_p _floating_layer;
-	tree_p _dock_layer;
 	tree_p _fullscreen_layer;
-	tree_p _tooltips_layer;
-	tree_p _notification_layer;
 	tree_p _overlays_layer;
-
-	tree_p _unknown_layer;
 
 	viewport_w _primary_viewport;
 	notebook_w _default_pop;
@@ -62,7 +57,6 @@ private:
 
 	bool _is_enable;
 
-	void _fix_view_floating_position();
 	void _init();
 
 public:
@@ -117,13 +111,9 @@ public:
 	void switch_fullscreen_to_prefered_view_mode(view_p c, xcb_timestamp_t time);
 	void switch_fullscreen_to_prefered_view_mode(view_fullscreen_p c, xcb_timestamp_t time);
 
-	void add_dock(shared_ptr<tree_t> c);
-	void add_floating(shared_ptr<tree_t> c);
-	void add_fullscreen(shared_ptr<tree_t> c);
-	void add_overlay(shared_ptr<tree_t> c);
-	void add_unknown(shared_ptr<tree_t> c);
-	void add_tooltips(shared_ptr<tree_t> c);
-	void add_notification(shared_ptr<tree_t> c);
+	void add_floating(tree_p c);
+	void add_fullscreen(tree_p c);
+	void add_overlay(tree_p c);
 
 	void set_name(string const & s);
 	auto name() -> string const &;

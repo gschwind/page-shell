@@ -25,25 +25,9 @@
 
 namespace page {
 
-struct view_rebased_t : public view_t {
-
-	rect _base_position;
-	rect _orig_position;
-
-//	struct _base_frame_t {
-//		page_t * _ctx;
-//		xcb_colormap_t _colormap;
-//		xcb_visualid_t _visual;
-//		uint8_t        _depth;
-//
-//		auto id() const -> xcb_window_t;
-//
-//		~_base_frame_t();
-//		_base_frame_t(page_t * ctx, xcb_visualid_t visual, uint8_t depth);
-//
-//	};
-//
-//	std::unique_ptr<_base_frame_t> _base;
+struct view_rebased_t :
+		public view_t
+{
 
 public:
 	view_rebased_t(tree_t * ref, client_managed_p client);

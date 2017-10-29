@@ -367,7 +367,6 @@ public:
 	void grab_start(shared_ptr<grab_handler_t> handler, guint32 time);
 	void grab_stop(guint32 time);
 	void insert_window_in_notebook(shared_ptr<client_managed_t> x, shared_ptr<notebook_t> n, bool prefer_activate);
-	void move_fullscreen_to_viewport(view_fullscreen_p c, viewport_p v);
 	void split_left(notebook_p nbk, view_p c, xcb_timestamp_t time);
 	void split_right(notebook_p nbk, view_p c, xcb_timestamp_t time);
 	void split_top(notebook_p nbk, view_p c, xcb_timestamp_t time);

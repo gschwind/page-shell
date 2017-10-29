@@ -105,10 +105,6 @@ void view_floating_t::remove_this_view()
 void view_floating_t::set_focus_state(bool is_focused)
 {
 	view_rebased_t::set_focus_state(is_focused);
-
-	region r = _base_position;
-	r -= _client->_absolute_position;
-	_root->_ctx->schedule_repaint();
 }
 
 void view_floating_t::reconfigure() {
@@ -118,32 +114,6 @@ void view_floating_t::reconfigure() {
 	auto _dpy = _root->_ctx->dpy();
 
 	_client->_absolute_position = _client->_floating_wished_position;
-
-	if (false) {
-		_base_position.x = _client->_absolute_position.x
-				- _ctx->theme()->floating.margin.left;
-		_base_position.y = _client->_absolute_position.y - _ctx->theme()->floating.margin.top - _ctx->theme()->floating.title_height;
-		_base_position.w = _client->_absolute_position.w + _ctx->theme()->floating.margin.left
-				+ _ctx->theme()->floating.margin.right;
-		_base_position.h = _client->_absolute_position.h + _ctx->theme()->floating.margin.top
-				+ _ctx->theme()->floating.margin.bottom + _ctx->theme()->floating.title_height;
-
-		_orig_position.x = _ctx->theme()->floating.margin.left;
-		_orig_position.y = _ctx->theme()->floating.margin.top + _ctx->theme()->floating.title_height;
-		_orig_position.w = _client->_absolute_position.w;
-		_orig_position.h = _client->_absolute_position.h;
-
-	} else {
-		_base_position.x = _client->_absolute_position.x;
-		_base_position.y = _client->_absolute_position.y;
-		_base_position.w = _client->_absolute_position.w;
-		_base_position.h = _client->_absolute_position.h;
-
-		_orig_position.x = 0;
-		_orig_position.y = 0;
-		_orig_position.w = _client->_absolute_position.w;
-		_orig_position.h = _client->_absolute_position.h;
-	}
 
 	if (meta_window_is_tiled_with_custom_position(_client->meta_window()))
 		meta_window_unmake_tiled_with_custom_position(_client->meta_window());

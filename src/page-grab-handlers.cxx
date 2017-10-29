@@ -503,287 +503,287 @@ void grab_bind_view_floating_t::button_release(ClutterEvent const * e)
 }
 
 
-grab_floating_move_t::grab_floating_move_t(page_t * ctx, view_floating_p f, unsigned int button, int x, int y) :
-		grab_default_t{ctx},
-		f{f},
-		original_position{f->_client->get_wished_position()},
-		final_position{f->_client->get_wished_position()},
-		x_root{x},
-		y_root{y},
-		button{button},
-		popup_original_position{f->_base_position}
-{
-
-	f->raise();
-	//_ctx->dpy()->set_window_cursor(f->_base->id(), _ctx->dpy()->xc_fleur);
-	//_ctx->dpy()->set_window_cursor(f->_client->_client_proxy->id(), _ctx->dpy()->xc_fleur);
-}
-
-grab_floating_move_t::~grab_floating_move_t() {
-
-}
-
-void grab_floating_move_t::button_press(ClutterEvent const * e) {
-	/* ignore */
-}
-
-void grab_floating_move_t::button_motion(ClutterEvent const * e)
-{
-	gfloat x, y;
-	clutter_event_get_coords(e, &x, &y);
-	auto button = clutter_event_get_button(e);
-	auto time = clutter_event_get_time(e);
-
-	if(f.expired()) {
-		_ctx->grab_stop(time);
-		return;
-	}
-
-	/* compute new window position */
-	rect new_position = original_position;
-	new_position.x += x - x_root;
-	new_position.y += y - y_root;
-	final_position = new_position;
-
-	rect new_popup_position = popup_original_position;
-	new_popup_position.x += x - x_root;
-	new_popup_position.y += y - y_root;
-	_ctx->schedule_repaint();
-
-}
-
-void grab_floating_move_t::button_release(ClutterEvent const * e)
-{
-	gfloat x, y;
-	clutter_event_get_coords(e, &x, &y);
-	auto button = clutter_event_get_button(e);
-	auto time = clutter_event_get_time(e);
-
-	if(f.expired()) {
-		_ctx->grab_stop(time);
-		return;
-	}
-
-	auto f = this->f.lock();
-
-	if (button == 1 or button == 3 or button == this->button) {
-
-		//_ctx->dpy()->set_window_cursor(f->_base->id(), XCB_NONE);
-
-		//_ctx->dpy()->set_window_cursor(f->_client->_client_proxy->id(), XCB_NONE);
-
-		f->_client->set_floating_wished_position(final_position);
-		f->reconfigure();
-
-		f->_root->set_focus(f, time);
-		_ctx->grab_stop(time);
-	}
-}
-
-xcb_cursor_t grab_floating_resize_t::_get_cursor() {
+//grab_floating_move_t::grab_floating_move_t(page_t * ctx, view_floating_p f, unsigned int button, int x, int y) :
+//		grab_default_t{ctx},
+//		f{f},
+//		original_position{f->_client->get_wished_position()},
+//		final_position{f->_client->get_wished_position()},
+//		x_root{x},
+//		y_root{y},
+//		button{button},
+//		popup_original_position{f->_base_position}
+//{
+//
+//	f->raise();
+//	//_ctx->dpy()->set_window_cursor(f->_base->id(), _ctx->dpy()->xc_fleur);
+//	//_ctx->dpy()->set_window_cursor(f->_client->_client_proxy->id(), _ctx->dpy()->xc_fleur);
+//}
+//
+//grab_floating_move_t::~grab_floating_move_t() {
+//
+//}
+//
+//void grab_floating_move_t::button_press(ClutterEvent const * e) {
+//	/* ignore */
+//}
+//
+//void grab_floating_move_t::button_motion(ClutterEvent const * e)
+//{
+//	gfloat x, y;
+//	clutter_event_get_coords(e, &x, &y);
+//	auto button = clutter_event_get_button(e);
+//	auto time = clutter_event_get_time(e);
+//
+//	if(f.expired()) {
+//		_ctx->grab_stop(time);
+//		return;
+//	}
+//
+//	/* compute new window position */
+//	rect new_position = original_position;
+//	new_position.x += x - x_root;
+//	new_position.y += y - y_root;
+//	final_position = new_position;
+//
+//	rect new_popup_position = popup_original_position;
+//	new_popup_position.x += x - x_root;
+//	new_popup_position.y += y - y_root;
+//	_ctx->schedule_repaint();
+//
+//}
+//
+//void grab_floating_move_t::button_release(ClutterEvent const * e)
+//{
+//	gfloat x, y;
+//	clutter_event_get_coords(e, &x, &y);
+//	auto button = clutter_event_get_button(e);
+//	auto time = clutter_event_get_time(e);
+//
+//	if(f.expired()) {
+//		_ctx->grab_stop(time);
+//		return;
+//	}
+//
+//	auto f = this->f.lock();
+//
+//	if (button == 1 or button == 3 or button == this->button) {
+//
+//		//_ctx->dpy()->set_window_cursor(f->_base->id(), XCB_NONE);
+//
+//		//_ctx->dpy()->set_window_cursor(f->_client->_client_proxy->id(), XCB_NONE);
+//
+//		f->_client->set_floating_wished_position(final_position);
+//		f->reconfigure();
+//
+//		f->_root->set_focus(f, time);
+//		_ctx->grab_stop(time);
+//	}
+//}
+//
+//xcb_cursor_t grab_floating_resize_t::_get_cursor() {
+////	switch(mode) {
+////	case RESIZE_TOP:
+////		return _ctx->dpy()->xc_top_side;
+////		break;
+////	case RESIZE_BOTTOM:
+////		return _ctx->dpy()->xc_bottom_side;
+////		break;
+////	case RESIZE_LEFT:
+////		return _ctx->dpy()->xc_left_side;
+////		break;
+////	case RESIZE_RIGHT:
+////		return _ctx->dpy()->xc_right_side;
+////		break;
+////	case RESIZE_TOP_LEFT:
+////		return _ctx->dpy()->xc_top_left_corner;
+////		break;
+////	case RESIZE_TOP_RIGHT:
+////		return _ctx->dpy()->xc_top_right_corner;
+////		break;
+////	case RESIZE_BOTTOM_LEFT:
+////		return _ctx->dpy()->xc_bottom_left_corner;
+////		break;
+////	case RESIZE_BOTTOM_RIGHT:
+////		return _ctx->dpy()->xc_bottom_righ_corner;
+////		break;
+////	}
+//
+//	return XCB_WINDOW_NONE;
+//}
+//
+//grab_floating_resize_t::grab_floating_resize_t(page_t * ctx, view_floating_p f, xcb_button_t button, int x, int y, resize_mode_e mode) :
+//		grab_default_t{ctx},
+//		f{f},
+//		mode{mode},
+//		x_root{x},
+//		y_root{y},
+//		original_position{f->_client->_absolute_position},
+//		final_position{f->_client->get_wished_position()},
+//		button{button}
+//
+//{
+//
+//	f->raise();
+//
+//	rect popup_new_position = original_position;
+//	if (false) {
+//		popup_new_position.x -= _ctx->theme()->floating.margin.left;
+//		popup_new_position.y -= _ctx->theme()->floating.margin.top;
+//		popup_new_position.y -= _ctx->theme()->floating.title_height;
+//		popup_new_position.w += _ctx->theme()->floating.margin.left
+//				+ _ctx->theme()->floating.margin.right;
+//		popup_new_position.h += _ctx->theme()->floating.margin.top
+//				+ _ctx->theme()->floating.margin.bottom;
+//		popup_new_position.h += _ctx->theme()->floating.title_height;
+//	}
+//
+////	pfm->move_resize(popup_new_position);
+////	_ctx->overlay_add(pfm);
+////	pfm->show();
+//
+//
+//	//_ctx->dpy()->set_window_cursor(f->_base->id(), _get_cursor());
+//
+//}
+//
+//grab_floating_resize_t::~grab_floating_resize_t() {
+//
+//}
+//
+//void grab_floating_resize_t::button_press(ClutterEvent const * e) {
+//
+//}
+//
+//void grab_floating_resize_t::button_motion(ClutterEvent const * e)
+//{
+//	gfloat x, y;
+//	clutter_event_get_coords(e, &x, &y);
+//	auto time = clutter_event_get_time(e);
+//
+//	if(f.expired()) {
+//		_ctx->grab_stop(time);
+//		return;
+//	}
+//
+//	rect size = original_position;
+//
 //	switch(mode) {
-//	case RESIZE_TOP:
-//		return _ctx->dpy()->xc_top_side;
-//		break;
-//	case RESIZE_BOTTOM:
-//		return _ctx->dpy()->xc_bottom_side;
-//		break;
-//	case RESIZE_LEFT:
-//		return _ctx->dpy()->xc_left_side;
-//		break;
-//	case RESIZE_RIGHT:
-//		return _ctx->dpy()->xc_right_side;
-//		break;
 //	case RESIZE_TOP_LEFT:
-//		return _ctx->dpy()->xc_top_left_corner;
+//		size.w -= x - x_root;
+//		size.h -= y - y_root;
+//		break;
+//	case RESIZE_TOP:
+//		size.h -= y - y_root;
 //		break;
 //	case RESIZE_TOP_RIGHT:
-//		return _ctx->dpy()->xc_top_right_corner;
+//		size.w += x - x_root;
+//		size.h -= y - y_root;
+//		break;
+//	case RESIZE_LEFT:
+//		size.w -= x - x_root;
+//		break;
+//	case RESIZE_RIGHT:
+//		size.w += x - x_root;
 //		break;
 //	case RESIZE_BOTTOM_LEFT:
-//		return _ctx->dpy()->xc_bottom_left_corner;
+//		size.w -= x - x_root;
+//		size.h += y - y_root;
+//		break;
+//	case RESIZE_BOTTOM:
+//		size.h += y - y_root;
 //		break;
 //	case RESIZE_BOTTOM_RIGHT:
-//		return _ctx->dpy()->xc_bottom_righ_corner;
+//		size.w += x - x_root;
+//		size.h += y - y_root;
 //		break;
 //	}
-
-	return XCB_WINDOW_NONE;
-}
-
-grab_floating_resize_t::grab_floating_resize_t(page_t * ctx, view_floating_p f, xcb_button_t button, int x, int y, resize_mode_e mode) :
-		grab_default_t{ctx},
-		f{f},
-		mode{mode},
-		x_root{x},
-		y_root{y},
-		original_position{f->_client->_absolute_position},
-		final_position{f->_client->get_wished_position()},
-		button{button}
-
-{
-
-	f->raise();
-
-	rect popup_new_position = original_position;
-	if (false) {
-		popup_new_position.x -= _ctx->theme()->floating.margin.left;
-		popup_new_position.y -= _ctx->theme()->floating.margin.top;
-		popup_new_position.y -= _ctx->theme()->floating.title_height;
-		popup_new_position.w += _ctx->theme()->floating.margin.left
-				+ _ctx->theme()->floating.margin.right;
-		popup_new_position.h += _ctx->theme()->floating.margin.top
-				+ _ctx->theme()->floating.margin.bottom;
-		popup_new_position.h += _ctx->theme()->floating.title_height;
-	}
-
-//	pfm->move_resize(popup_new_position);
-//	_ctx->overlay_add(pfm);
-//	pfm->show();
-
-
-	//_ctx->dpy()->set_window_cursor(f->_base->id(), _get_cursor());
-
-}
-
-grab_floating_resize_t::~grab_floating_resize_t() {
-
-}
-
-void grab_floating_resize_t::button_press(ClutterEvent const * e) {
-
-}
-
-void grab_floating_resize_t::button_motion(ClutterEvent const * e)
-{
-	gfloat x, y;
-	clutter_event_get_coords(e, &x, &y);
-	auto time = clutter_event_get_time(e);
-
-	if(f.expired()) {
-		_ctx->grab_stop(time);
-		return;
-	}
-
-	rect size = original_position;
-
-	switch(mode) {
-	case RESIZE_TOP_LEFT:
-		size.w -= x - x_root;
-		size.h -= y - y_root;
-		break;
-	case RESIZE_TOP:
-		size.h -= y - y_root;
-		break;
-	case RESIZE_TOP_RIGHT:
-		size.w += x - x_root;
-		size.h -= y - y_root;
-		break;
-	case RESIZE_LEFT:
-		size.w -= x - x_root;
-		break;
-	case RESIZE_RIGHT:
-		size.w += x - x_root;
-		break;
-	case RESIZE_BOTTOM_LEFT:
-		size.w -= x - x_root;
-		size.h += y - y_root;
-		break;
-	case RESIZE_BOTTOM:
-		size.h += y - y_root;
-		break;
-	case RESIZE_BOTTOM_RIGHT:
-		size.w += x - x_root;
-		size.h += y - y_root;
-		break;
-	}
-
-	/* apply normal hints */
-	dimention_t<unsigned> final_size{1, 1};// =
-//			f.lock()->_client->compute_size_with_constrain(size.w, size.h);
-	size.w = final_size.width;
-	size.h = final_size.height;
-
-	if (size.h < 1)
-		size.h = 1;
-	if (size.w < 1)
-		size.w = 1;
-
-	/* do not allow to large windows */
-//	if (size.w > _root_position.w - 100)
-//		size.w = _root_position.w - 100;
-//	if (size.h > _root_position.h - 100)
-//		size.h = _root_position.h - 100;
-
-	int x_diff = 0;
-	int y_diff = 0;
-
-	switch(mode) {
-	case RESIZE_TOP_LEFT:
-		x_diff = original_position.w - size.w;
-		y_diff = original_position.h - size.h;
-		break;
-	case RESIZE_TOP:
-		y_diff = original_position.h - size.h;
-		break;
-	case RESIZE_TOP_RIGHT:
-		y_diff = original_position.h - size.h;
-		break;
-	case RESIZE_LEFT:
-		x_diff = original_position.w - size.w;
-		break;
-	case RESIZE_RIGHT:
-		break;
-	case RESIZE_BOTTOM_LEFT:
-		x_diff = original_position.w - size.w;
-		break;
-	case RESIZE_BOTTOM:
-		break;
-	case RESIZE_BOTTOM_RIGHT:
-		break;
-	}
-
-	size.x += x_diff;
-	size.y += y_diff;
-	final_position = size;
-
-	rect popup_new_position = size;
-	if (false) {
-		popup_new_position.x -= _ctx->theme()->floating.margin.left;
-		popup_new_position.y -= _ctx->theme()->floating.margin.top;
-		popup_new_position.y -= _ctx->theme()->floating.title_height;
-		popup_new_position.w += _ctx->theme()->floating.margin.left
-				+ _ctx->theme()->floating.margin.right;
-		popup_new_position.h += _ctx->theme()->floating.margin.top
-				+ _ctx->theme()->floating.margin.bottom;
-		popup_new_position.h += _ctx->theme()->floating.title_height;
-	}
-
-}
-
-void grab_floating_resize_t::button_release(ClutterEvent const * e)
-{
-	gfloat x, y;
-	clutter_event_get_coords(e, &x, &y);
-	auto button = clutter_event_get_button(e);
-	auto time = clutter_event_get_time(e);
-
-	if(f.expired()) {
-		_ctx->grab_stop(time);
-		return;
-	}
-
-	auto f = this->f.lock();
-
-	if (button == this->button) {
-		//_ctx->dpy()->set_window_cursor(f->_base->id(), XCB_NONE);
-		//_ctx->dpy()->set_window_cursor(f->_client->_client_proxy->id(), XCB_NONE);
-		f->_client->set_floating_wished_position(final_position);
-		f->reconfigure();
-		f->_root->set_focus(f, time);
-		_ctx->grab_stop(time);
-	}
-}
+//
+//	/* apply normal hints */
+//	dimention_t<unsigned> final_size{1, 1};// =
+////			f.lock()->_client->compute_size_with_constrain(size.w, size.h);
+//	size.w = final_size.width;
+//	size.h = final_size.height;
+//
+//	if (size.h < 1)
+//		size.h = 1;
+//	if (size.w < 1)
+//		size.w = 1;
+//
+//	/* do not allow to large windows */
+////	if (size.w > _root_position.w - 100)
+////		size.w = _root_position.w - 100;
+////	if (size.h > _root_position.h - 100)
+////		size.h = _root_position.h - 100;
+//
+//	int x_diff = 0;
+//	int y_diff = 0;
+//
+//	switch(mode) {
+//	case RESIZE_TOP_LEFT:
+//		x_diff = original_position.w - size.w;
+//		y_diff = original_position.h - size.h;
+//		break;
+//	case RESIZE_TOP:
+//		y_diff = original_position.h - size.h;
+//		break;
+//	case RESIZE_TOP_RIGHT:
+//		y_diff = original_position.h - size.h;
+//		break;
+//	case RESIZE_LEFT:
+//		x_diff = original_position.w - size.w;
+//		break;
+//	case RESIZE_RIGHT:
+//		break;
+//	case RESIZE_BOTTOM_LEFT:
+//		x_diff = original_position.w - size.w;
+//		break;
+//	case RESIZE_BOTTOM:
+//		break;
+//	case RESIZE_BOTTOM_RIGHT:
+//		break;
+//	}
+//
+//	size.x += x_diff;
+//	size.y += y_diff;
+//	final_position = size;
+//
+//	rect popup_new_position = size;
+//	if (false) {
+//		popup_new_position.x -= _ctx->theme()->floating.margin.left;
+//		popup_new_position.y -= _ctx->theme()->floating.margin.top;
+//		popup_new_position.y -= _ctx->theme()->floating.title_height;
+//		popup_new_position.w += _ctx->theme()->floating.margin.left
+//				+ _ctx->theme()->floating.margin.right;
+//		popup_new_position.h += _ctx->theme()->floating.margin.top
+//				+ _ctx->theme()->floating.margin.bottom;
+//		popup_new_position.h += _ctx->theme()->floating.title_height;
+//	}
+//
+//}
+//
+//void grab_floating_resize_t::button_release(ClutterEvent const * e)
+//{
+//	gfloat x, y;
+//	clutter_event_get_coords(e, &x, &y);
+//	auto button = clutter_event_get_button(e);
+//	auto time = clutter_event_get_time(e);
+//
+//	if(f.expired()) {
+//		_ctx->grab_stop(time);
+//		return;
+//	}
+//
+//	auto f = this->f.lock();
+//
+//	if (button == this->button) {
+//		//_ctx->dpy()->set_window_cursor(f->_base->id(), XCB_NONE);
+//		//_ctx->dpy()->set_window_cursor(f->_client->_client_proxy->id(), XCB_NONE);
+//		f->_client->set_floating_wished_position(final_position);
+//		f->reconfigure();
+//		f->_root->set_focus(f, time);
+//		_ctx->grab_stop(time);
+//	}
+//}
 
 //grab_fullscreen_client_t::grab_fullscreen_client_t(page_t * ctx, view_fullscreen_p mw, xcb_button_t button, int x, int y) :
 // grab_default_t{ctx},

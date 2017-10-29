@@ -1001,19 +1001,6 @@ vector<shared_ptr<tree_t>> page_t::get_all_children() const
 	return ret;
 }
 
-void page_t::move_fullscreen_to_viewport(view_fullscreen_p fv, viewport_p v) {
-
-	if (not fv->_viewport.expired()) {
-		fv->_viewport.lock()->show();
-	}
-
-//	fv->_client->_absolute_position = v->raw_area();
-	fv->_viewport = v;
-	fv->show();
-	v->hide();
-
-}
-
 void page_t::cleanup_grab() {
 	_grab_handler = nullptr;
 }
@@ -1081,14 +1068,6 @@ void page_t::update_viewport_layout() {
 }
 
 void page_t::remove_viewport(shared_ptr<workspace_t> d, shared_ptr<viewport_t> v) {
-
-	/* remove fullscreened clients if needed */
-	for (auto &x : v->_root->gather_children_root_first<view_fullscreen_t>()) {
-		if (x->_viewport.lock() == v) {
-			x->workspace()->switch_fullscreen_to_prefered_view_mode(x, XCB_CURRENT_TIME);
-			break;
-		}
-	}
 
 	/* Transfer clients to a valid notebook */
 	for (auto x : v->gather_children_root_first<view_notebook_t>()) {

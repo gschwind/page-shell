@@ -28,18 +28,8 @@
 
 namespace page {
 
-view_fullscreen_t::view_fullscreen_t(client_managed_p client, viewport_p viewport) :
-		view_rebased_t{viewport.get(), client},
-		revert_type{MANAGED_FLOATING},
-		_viewport{viewport}
-{
-
-}
-
-view_fullscreen_t::view_fullscreen_t(view_rebased_t * src, viewport_p viewport) :
-	view_rebased_t{src},
-	revert_type{MANAGED_FLOATING},
-	_viewport{viewport}
+view_fullscreen_t::view_fullscreen_t(tree_t * ref, client_managed_p client) :
+		view_rebased_t{ref, client}
 {
 
 }
@@ -54,40 +44,15 @@ auto view_fullscreen_t::shared_from_this() -> view_fullscreen_p
 	return static_pointer_cast<view_fullscreen_t>(tree_t::shared_from_this());
 }
 
-void view_fullscreen_t::_on_configure_request(client_managed_t * c, xcb_configure_request_event_t const * e)
-{
-	if (_root->is_enable())
-		reconfigure();
-}
-
 void view_fullscreen_t::remove_this_view()
 {
 	view_t::remove_this_view();
-	if (not _viewport.expired()) {
-		auto viewport = _viewport.lock();
-		viewport->show();
-		_root->_ctx->schedule_repaint();
-	}
 }
 
 void view_fullscreen_t::reconfigure()
 {
 	auto _ctx = _root->_ctx;
 	auto _dpy = _root->_ctx->dpy();
-
-
-//	if(not _viewport.expired())
-//		_client->_absolute_position = _viewport.lock()->raw_area();
-
-	_base_position.x = _client->_absolute_position.x;
-	_base_position.y = _client->_absolute_position.y;
-	_base_position.w = _client->_absolute_position.w;
-	_base_position.h = _client->_absolute_position.h;
-
-	_orig_position.x = 0;
-	_orig_position.y = 0;
-	_orig_position.w = _client->_absolute_position.w;
-	_orig_position.h = _client->_absolute_position.h;
 
 	if (not _is_client_owner())
 		return;

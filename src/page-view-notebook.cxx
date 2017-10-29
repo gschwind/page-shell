@@ -94,16 +94,16 @@ void view_notebook_t::_handler_position_changed(MetaWindow * window)
 {
 	log::printf("call %s\n", __PRETTY_FUNCTION__);
 //	/* disable frame move */
-//	if (_is_client_owner())
-//		meta_window_move_frame(window, FALSE, _client->_absolute_position.x, _client->_absolute_position.y);
+	if (_is_client_owner())
+		meta_window_move_frame(window, FALSE, _client->_absolute_position.x, _client->_absolute_position.y);
 }
 
 void view_notebook_t::_handler_size_changed(MetaWindow * window)
 {
 	log::printf("call %s\n", __PRETTY_FUNCTION__);
 //	/* disable frame resize */
-//	if (_is_client_owner())
-//		meta_window_move_resize_frame(window, FALSE, _client->_absolute_position.x, _client->_absolute_position.y, _client->_absolute_position.w, _client->_absolute_position.h);
+	if (_is_client_owner())
+		meta_window_move_resize_frame(window, FALSE, _client->_absolute_position.x, _client->_absolute_position.y, _client->_absolute_position.w, _client->_absolute_position.h);
 }
 
 void view_notebook_t::xxactivate(xcb_timestamp_t time)
@@ -126,21 +126,7 @@ void view_notebook_t::set_focus_state(bool is_focused)
 
 void view_notebook_t::reconfigure()
 {
-	auto _ctx = _root->_ctx;
-	auto _dpy = _root->_ctx->dpy();
-
-	_base_position.x = _client->_absolute_position.x;
-	_base_position.y = _client->_absolute_position.y;
-	_base_position.w = _client->_absolute_position.w;
-	_base_position.h = _client->_absolute_position.h;
-
-	_orig_position.x = 0;
-	_orig_position.y = 0;
-	_orig_position.w = _client->_absolute_position.w;
-	_orig_position.h = _client->_absolute_position.h;
-
 	_reconfigure_windows();
-
 }
 
 } /* namespace page */

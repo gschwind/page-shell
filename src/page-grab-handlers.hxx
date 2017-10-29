@@ -136,49 +136,49 @@ enum resize_mode_e {
 };
 
 
-struct grab_floating_move_t : public grab_default_t {
-	int x_root;
-	int y_root;
-	rect original_position;
-	rect popup_original_position;
-	view_floating_w f;
-	rect final_position;
-	unsigned int button;
+//struct grab_floating_move_t : public grab_default_t {
+//	int x_root;
+//	int y_root;
+//	rect original_position;
+//	rect popup_original_position;
+//	view_floating_w f;
+//	rect final_position;
+//	unsigned int button;
+//
+//	grab_floating_move_t(page_t * ctx, view_floating_p f, unsigned int button, int x, int y);
+//
+//	virtual ~grab_floating_move_t();
+//	virtual void button_press(ClutterEvent const * e) override;
+//	virtual void button_motion(ClutterEvent const * e) override;
+//	virtual void button_release(ClutterEvent const * e) override;
+//	using grab_handler_t::key_press;
+//	using grab_handler_t::key_release;
+//};
 
-	grab_floating_move_t(page_t * ctx, view_floating_p f, unsigned int button, int x, int y);
-
-	virtual ~grab_floating_move_t();
-	virtual void button_press(ClutterEvent const * e) override;
-	virtual void button_motion(ClutterEvent const * e) override;
-	virtual void button_release(ClutterEvent const * e) override;
-	using grab_handler_t::key_press;
-	using grab_handler_t::key_release;
-};
-
-struct grab_floating_resize_t : public grab_default_t {
-	view_floating_w f;
-
-	resize_mode_e mode;
-	int x_root;
-	int y_root;
-	rect original_position;
-	rect final_position;
-	xcb_button_t button;
-
-	xcb_cursor_t _get_cursor();
-
-public:
-
-	grab_floating_resize_t(page_t * _ctx, view_floating_p f, xcb_button_t button, int x, int y, resize_mode_e mode);
-
-	virtual ~grab_floating_resize_t();
-	virtual void button_press(ClutterEvent const * e) override;
-	virtual void button_motion(ClutterEvent const * e) override;
-	virtual void button_release(ClutterEvent const * e) override;
-	using grab_handler_t::key_press;
-	using grab_handler_t::key_release;
-
-};
+//struct grab_floating_resize_t : public grab_default_t {
+//	view_floating_w f;
+//
+//	resize_mode_e mode;
+//	int x_root;
+//	int y_root;
+//	rect original_position;
+//	rect final_position;
+//	xcb_button_t button;
+//
+//	xcb_cursor_t _get_cursor();
+//
+//public:
+//
+//	grab_floating_resize_t(page_t * _ctx, view_floating_p f, xcb_button_t button, int x, int y, resize_mode_e mode);
+//
+//	virtual ~grab_floating_resize_t();
+//	virtual void button_press(ClutterEvent const * e) override;
+//	virtual void button_motion(ClutterEvent const * e) override;
+//	virtual void button_release(ClutterEvent const * e) override;
+//	using grab_handler_t::key_press;
+//	using grab_handler_t::key_release;
+//
+//};
 
 //struct grab_fullscreen_client_t : public grab_default_t {
 //	view_fullscreen_w mw;
