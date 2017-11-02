@@ -24,3 +24,12 @@ install_data([
   'window-close.png'],
   install_dir: join_paths(pkgdatadir, 'data')
 )
+
+cdatax = configuration_data()
+cdatax.set('bindir', bindir)
+configure_file(
+  input:  'net.hzog.Shell.desktop.in',
+  output: 'net.hzog.Shell.desktop',
+  configuration: cdatax,
+  install_dir: desktopdir
+)

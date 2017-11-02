@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Name[fr]=PAGE Shell
+Name=PAGE Shell
+Comment[fr]=Gestion des fenêtres et lancement des applications
+Comment=Window management and application launching
+Exec=@bindir@/page-shell
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=page-shell
+X-GNOME-Bugzilla-Component=general
+X-GNOME-Bugzilla-Version=3.22.3
+Categories=GNOME;GTK;Core;
+OnlyShowIn=GNOME;
+NoDisplay=true
+X-GNOME-Autostart-Phase=DisplayServer
+X-GNOME-Provides=panel;windowmanager;
+X-GNOME-Autostart-Notify=true
+X-GNOME-AutoRestart=false
