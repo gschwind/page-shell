@@ -31,6 +31,7 @@
 #include <memory>
 #include <sstream>
 #include <iostream>
+#include <functional>
 
 #include <glib-2.0/glib.h>
 
