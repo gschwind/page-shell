@@ -189,6 +189,15 @@ config_h = configure_file(
   configuration: cdata
 )
 
+cdata.set('PKGDATADIR', pkgdatadir)
+configure_file(
+  input:  'page.conf.in',
+  output: 'page.conf',
+  configuration: cdata,
+  install_dir: pkgdatadir
+)
+
+
 conf_inc = include_directories('.')
 
 libgvc = subproject('gvc',
@@ -208,6 +217,7 @@ subdir('src')
 subdir('po')
 subdir('data')
 subdir('tests')
+subdir('page-data')
 
 if get_option('enable-documentation')
   subdir('docs/reference')

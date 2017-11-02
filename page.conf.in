@@ -1,0 +1,229 @@
+####
+# Page configuration file, do not edit it!
+# Use $HOME/.page.conf to overide those options.
+####
+
+[default]
+#theme directory (page data directory)
+theme_dir=@PKGDATADIR@/data/
+
+# select theme engine : simple or tiny
+theme_engine=simple
+
+# quit page
+bind_page_quit=mod4 q
+
+# close window
+bind_close=mod1 F4
+
+# start exposay for all notebook
+bind_exposay_all=mod4 Tab
+
+# switch between fullscreen and floating/binded window
+bind_toggle_fullscreen=mod4 f
+
+# start/stop page compositor
+bind_toggle_compositor=mod4 0
+
+# switch to the next desktop
+bind_right_desktop=mod1 control Right
+
+# switch to the previous desktop
+bind_left_desktop=mod1 control Left
+
+# bind the focussed window
+bind_bind_window=mod4 b
+
+# fullscreen the focussed window
+bind_fullscreen_window=mod4 v
+
+# make floatting the focussed window
+bind_float_window=mod4 c
+
+# bind keys for debuging
+bind_debug_1=mod4 1
+bind_debug_2=mod4 2
+bind_debug_3=mod4 3
+bind_debug_4=mod4 4
+
+bind_cmd_0=mod4 t
+exec_cmd_0=/usr/bin/xterm
+
+bind_cmd_1=null
+exec_cmd_1=null
+
+bind_cmd_2=null
+exec_cmd_2=null
+
+bind_cmd_3=null
+exec_cmd_3=null
+
+bind_cmd_4=null
+exec_cmd_4=null
+
+bind_cmd_5=null
+exec_cmd_5=null
+
+bind_cmd_6=null
+exec_cmd_6=null
+
+bind_cmd_7=null
+exec_cmd_7=null
+
+bind_cmd_8=null
+exec_cmd_8=null
+
+bind_cmd_9=null
+exec_cmd_9=null
+
+# menu window dropdown shadow
+menu_drop_down_shadow = true
+
+# mouse auto-focus
+mouse_focus=false
+
+# auto-focus old window when current focuced window is closed (can be true or false ONLY)
+auto_refocus=false
+
+# allow to shade a window by clicking on notebook (can be true or false ONLY)
+enable_shade_windows=false
+
+[compositor]
+
+# Compositor fade in time in nano second
+fade_in_time = 300000000
+
+# Compositor fade out time in nano second
+fade_out_time = 300000000
+
+
+###
+# This section is related to simple_theme engine
+###
+[simple_theme]
+
+# set background image (optional)
+#
+#background_png=/absolute_path_to_some_file.png
+
+#possible mode are : *tile, zoom, center, scale, stretch, span (==scale)
+scale_mode=zoom
+
+# notebook layout
+# margin_top include tabs.
+#
+notebook_margin_top     = 4
+notebook_margin_bottom  = 4
+notebook_margin_left    = 4
+notebook_margin_right   = 4
+
+pango_font = Ubuntu Bold 11
+pango_popup_font = Ubuntu Bold 20
+
+# color used when no backgroun imgage is set.
+default_background_color = 005C3566
+
+# popup colors
+popup_text_color = FFFFFF
+popup_outline_color = 000000
+popup_background_color = 004e9a06
+
+# grip square color
+grip_color = 00ff0000
+
+# notebook background color when mouse is over it
+notebook_mouse_over_background_color   = 008cc4ff
+
+# active notebook is the notebook that have the focus.
+#
+# active notebook text font.
+notebook_active_font               = Ubuntu Bold 10
+# active notebook text color.
+notebook_active_text_color         = 00FFFFFF
+# active notebook text outline color
+notebook_active_outline_color      = 88000000
+# active notebook color border
+notebook_active_border_color       = 2273d216
+# active notebook background
+notebook_active_background_color   = 003465A4
+
+# selected notebook is the notebook currently selected for a group of notebook
+# but that do not have the focus.
+#
+# selected notebook text font.
+notebook_selected_font             = Ubuntu Bold 10
+# selected notebook (not active one) title text color
+notebook_selected_text_color       = 00FFFFFF
+# selected notebook (not active one) title text outline color
+notebook_selected_outline_color    = 88000000
+# selected notebook (not active one) border color
+notebook_selected_border_color     = 224e9a06
+# selected notebook (not active one) background
+notebook_selected_background_color = 22729fcf
+
+# demands attention notebook.
+#
+# attention notebook text font.
+notebook_attention_font               = Ubuntu Regular 10
+# attention notebook text color
+notebook_attention_text_color         = 00FFFFFF
+# attention notebook text outline color
+notebook_attention_outline_color      = 88000000
+# attention notebook border color.
+notebook_attention_border_color       = 44ffff00
+# attention notebook text background
+notebook_attention_background_color   = 00ffff00
+
+# inactive notebook are all not active and not selected notebook.
+#
+# inactive notebook text font.
+notebook_normal_font               = Ubuntu Regular 10
+# inactive notebook text color
+notebook_normal_text_color         = 00FFFFFF
+# inactive notebook text outline color
+notebook_normal_outline_color      = 88000000
+# inactive notebook border color.
+notebook_normal_border_color       = 44ccccce
+# inactive notebook text background
+notebook_normal_background_color   = 00ccccce
+
+
+# active floating window.
+#
+# active floating text font.
+floating_active_font               = Ubuntu Bold 10
+# active floating text color.
+floating_active_text_color         = 00FFFFFF
+# active floating text outline color
+floating_active_outline_color      = 88000000
+# active floating color border
+floating_active_border_color       = 2273d216
+# active floating background
+floating_active_background_color   = 003465A4
+
+# demand attention floating.
+#
+# attention floating text font.
+floating_attention_font               = Ubuntu Bold 10
+# attention floating text color
+floating_attention_text_color         = 00FFFFFF
+# attention floating text outline color
+floating_attention_outline_color      = 88000000
+# attention floating border color.
+floating_attention_border_color       = 22ffff00
+# attention floating text background
+floating_attention_background_color   = 00ffff00
+
+# inactive floating.
+#
+# innactive floating text font.
+floating_normal_font               = Ubuntu Bold 10
+# inactive floating text color
+floating_normal_text_color         = 00FFFFFF
+# inactive floating text outline color
+floating_normal_outline_color      = 88000000
+# inactive floating border color.
+floating_normal_border_color       = 224e9a06
+# inactive floating text background
+floating_normal_background_color   = 22729fcf
+
