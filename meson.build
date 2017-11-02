@@ -189,6 +189,7 @@ config_h = configure_file(
   configuration: cdata
 )
 
+cdata = configuration_data()
 cdata.set('PKGDATADIR', pkgdatadir)
 configure_file(
   input:  'page.conf.in',
