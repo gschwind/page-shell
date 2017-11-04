@@ -205,6 +205,22 @@ dbus_generated = gnome.gdbus_codegen('org-gtk-application',
 
 libshell_no_gir_sources += dbus_generated
 
+cdata = configuration_data()
+cdata.set('prefix', prefix)
+cdata.set('exec_prefix', '${prefix}')
+cdata.set('libdir', libdir)
+cdata.set('includedir', includedir)
+cdata.set('datadir', datadir)
+cdata.set('LIBMUTTER_API_VERSION', mutter_api_version)
+cdata.set('VERSION', meson.project_version())
+
+configure_file(
+  input: 'libgnome-shell.pc.in',
+  output: 'libgnome-shell.pc',
+  configuration: cdata,
+  install_dir: join_paths(libdir, 'pkgconfig')
+)
+
 install_data(
 	libshell_public_headers,
 	install_dir: join_paths(includedir, meson.project_name())
