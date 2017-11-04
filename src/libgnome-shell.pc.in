@@ -2,13 +2,13 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
-girdir=@datadir@/gnome-shell
-typelibdir=@libdir@/gnome-shell
+girdir=@datadir@/page-shell
+typelibdir=@libdir@/page-shell
 apiversion=@LIBMUTTER_API_VERSION@
 
-Name: libgnome-shell
+Name: libpage-shell
 Description: Page Shell library
-Requires: gsettings-desktop-schemas gtk+-3.0 mutter-clutter-@LIBMUTTER_API_VERSION@ x11 libmutter-@LIBMUTTER_API_VERSION@
+Requires: gsettings-desktop-schemas gtk+-3.0 page-mutter-clutter-@LIBMUTTER_API_VERSION@ x11 libpage-mutter-@LIBMUTTER_API_VERSION@
 Version: @VERSION@
-Libs: -L${libdir} -lgnome-shell
-Cflags: -I${includedir}/gnome-shell
+Libs: -L${libdir}/page-shell -lpage-shell
+Cflags: -I${includedir}/page-shell

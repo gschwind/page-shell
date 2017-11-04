@@ -216,7 +216,7 @@ cdata.set('VERSION', meson.project_version())
 
 configure_file(
   input: 'libgnome-shell.pc.in',
-  output: 'libgnome-shell.pc',
+  output: 'libpage-shell.pc',
   configuration: cdata,
   install_dir: join_paths(libdir, 'pkgconfig')
 )
@@ -226,7 +226,7 @@ install_data(
 	install_dir: join_paths(includedir, meson.project_name())
 )
 
-libshell = library('gnome-shell',
+libshell = library('page-shell',
   sources: libshell_gir_sources + libshell_no_gir_sources,
   dependencies: gnome_shell_deps + [libshell_menu_dep, libst_dep, mutter_dep, m_dep],
   include_directories: [conf_inc, st_inc, include_directories('tray')],
@@ -312,7 +312,7 @@ executable('page-shell-perf-helper', 'shell-perf-helper.c',
   install: true
 )
 
-executable('run-js-test', 'run-js-test.c',
+executable('page-run-js-test', 'run-js-test.c',
   dependencies: [mutter_dep, gio_dep, gjs_dep],
   include_directories: [conf_inc],
   link_with: libshell,
