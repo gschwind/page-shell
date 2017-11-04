@@ -1,0 +1,14 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@/page-shell
+includedir=@includedir@/page-shell
+girdir=@pkgdatadir@
+typelibdir=@libdir@/page-shell
+apiversion=@LIBMUTTER_API_VERSION@
+
+Name: libpage-shell
+Description: Page Shell library
+Requires: gsettings-desktop-schemas gtk+-3.0 pxmutter-clutter-@LIBMUTTER_API_VERSION@ x11 libpxmutter-@LIBMUTTER_API_VERSION@
+Version: @VERSION@
+Libs: -L${libdir} -lpage-shell
+Cflags: -I${includedir}
