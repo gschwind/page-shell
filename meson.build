@@ -44,6 +44,7 @@ libdir = join_paths(prefix, get_option('libdir'))
 libexecdir = join_paths(prefix, get_option('libexecdir'))
 mandir = join_paths(prefix, get_option('mandir'))
 sysconfdir = join_paths(prefix, get_option('sysconfdir'))
+includedir = join_paths(prefix, get_option('includedir'))
 
 pkgdatadir = join_paths(datadir, meson.project_name())
 pkglibdir = join_paths(libdir, meson.project_name())
