@@ -205,6 +205,11 @@ dbus_generated = gnome.gdbus_codegen('org-gtk-application',
 
 libshell_no_gir_sources += dbus_generated
 
+install_data(
+	libshell_public_headers,
+	install_dir: join_paths(includedir, meson.project_name())
+)
+
 libshell = library('gnome-shell',
   sources: libshell_gir_sources + libshell_no_gir_sources,
   dependencies: gnome_shell_deps + [libshell_menu_dep, libst_dep, mutter_dep, m_dep],
