@@ -45,10 +45,10 @@ AC_SUBST(PYTHON)
 # the Cogl and Clutter libraries also use this API version.
 LIBMUTTER_API_VERSION=0
 
-LIBMUTTER=libmutter-$LIBMUTTER_API_VERSION
-LIBMUTTER_COGL=mutter-cogl-$LIBMUTTER_API_VERSION
-LIBMUTTER_COGL_PANGO=mutter-cogl-pango-$LIBMUTTER_API_VERSION
-LIBMUTTER_CLUTTER=mutter-clutter-$LIBMUTTER_API_VERSION
+LIBMUTTER=libpage-mutter-$LIBMUTTER_API_VERSION
+LIBMUTTER_COGL=page-mutter-cogl-$LIBMUTTER_API_VERSION
+LIBMUTTER_COGL_PANGO=page-mutter-cogl-pango-$LIBMUTTER_API_VERSION
+LIBMUTTER_CLUTTER=page-mutter-clutter-$LIBMUTTER_API_VERSION
 
 # We need at least this, since gst_plugin_register_static() was added
 # in 0.10.16, but nothing older than 0.10.21 has been tested.
