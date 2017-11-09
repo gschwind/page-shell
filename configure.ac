@@ -257,6 +257,7 @@ AC_CONFIG_FILES([
   data/Makefile
   js/Makefile
   src/Makefile
+  src/libpage-shell.pc
   src/gvc/Makefile
   tests/Makefile
   po/Makefile.in

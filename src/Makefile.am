@@ -79,6 +79,7 @@ gnome_shell_cflags =				\
 
 privlibdir = $(pkglibdir)
 privlib_LTLIBRARIES = libgnome-shell-menu.la libgnome-shell.la
+
 noinst_LTLIBRARIES += libgnome-shell-base.la
 
 shell_built_sources = \
@@ -110,6 +111,12 @@ shell_public_headers_h =		\
 	shell-window-tracker.h		\
 	shell-wm.h			\
 	$(NULL)
+
+privlibincludedir = $(includedir)/page-shell
+privlibinclude_HEADERS = $(shell_public_headers_h)
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libpage-shell.pc
 
 if HAVE_NETWORKMANAGER
 shell_public_headers_h +=  shell-network-agent.h
