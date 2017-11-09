@@ -29,9 +29,9 @@ CLEANFILES += $(service_DATA)
 
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
 
-bin_SCRIPTS += gnome-shell-extension-tool gnome-shell-perf-tool
+bin_SCRIPTS += page-shell-extension-tool page-shell-perf-tool
 EXTRA_DIST += gnome-shell-extension-tool.in gnome-shell-perf-tool.in
-bin_PROGRAMS = gnome-shell gnome-shell-extension-prefs
+bin_PROGRAMS = page-shell page-shell-extension-prefs
 
 generated_script_substitutions = \
 	    -e "s|@bindir[@]|$(bindir)|g" \
@@ -45,10 +45,10 @@ generated_script_substitutions = \
 	    -e "s|@sysconfdir[@]|$(sysconfdir)|g" \
 	    -e "s|@GJS_CONSOLE[@]|$(GJS_CONSOLE)|g"
 
-gnome-shell-extension-tool: gnome-shell-extension-tool.in Makefile
+page-shell-extension-tool: gnome-shell-extension-tool.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 
-gnome-shell-perf-tool: gnome-shell-perf-tool.in Makefile
+page-shell-perf-tool: gnome-shell-perf-tool.in Makefile
 	$(AM_V_GEN) sed $(generated_script_substitutions) $< > $@.tmp && mv $@.tmp $@ && chmod a+x $@
 
 org-gtk-application.c org-gtk-application.h: org.gtk.Application.xml Makefile
@@ -58,7 +58,7 @@ org-gtk-application.c org-gtk-application.h: org.gtk.Application.xml Makefile
 			$<
 
 EXTRA_DIST += org.gtk.Application.xml
-CLEANFILES += gnome-shell $(bin_SCRIPTS)
+CLEANFILES += page-shell $(bin_SCRIPTS)
 
 include Makefile-st.am
 include Makefile-tray.am
@@ -190,42 +190,42 @@ shell_no_gir_sources = \
 libgnome_shell_la_gir_sources = \
 	$(filter-out %-private.h $(shell_private_sources) $(shell_no_gir_sources), $(shell_public_headers_h) $(libgnome_shell_base_la_SOURCES) $(libgnome_shell_sources) $(libgnome_shell_built_sources))
 
-gnome_shell_SOURCES = main.c
-gnome_shell_CPPFLAGS = \
+page_shell_SOURCES = main.c
+page_shell_CPPFLAGS = \
 	-DMUTTER_TYPELIB_DIR=\"$(MUTTER_TYPELIB_DIR)\" \
 	$(MUTTER_CFLAGS) \
 	$(gnome_shell_cflags)
 
 # Here, and after, we repeat mutter and bluetooth libraries just for the rpath
 # The dependency is already pulled in by libtool
-gnome_shell_LDADD = libgnome-shell.la $(GNOME_SHELL_LIBS) $(MUTTER_LIBS)
-gnome_shell_LDFLAGS = -rpath $(MUTTER_TYPELIB_DIR)
-gnome_shell_DEPENDENCIES = libgnome-shell.la
+page_shell_LDADD = libgnome-shell.la $(GNOME_SHELL_LIBS) $(MUTTER_LIBS)
+page_shell_LDFLAGS = -rpath $(MUTTER_TYPELIB_DIR)
+page_shell_DEPENDENCIES = libgnome-shell.la
 
-gnome_shell_extension_prefs_SOURCES = \
+page_shell_extension_prefs_SOURCES = \
 	gnome-shell-extension-prefs.c \
 	$(NULL)
-nodist_gnome_shell_extension_prefs_SOURCES = \
+nodist_page_shell_extension_prefs_SOURCES = \
 	$(top_builddir)/js/js-resources.c		\
 	$(top_builddir)/js/js-resources.h		\
 	$(NULL)
-gnome_shell_extension_prefs_CPPFLAGS = $(gnome_shell_cflags)
-gnome_shell_extension_prefs_LDADD = $(GNOME_SHELL_LIBS)
-gnome_shell_extension_prefs_LDFLAGS = -rpath $(MUTTER_TYPELIB_DIR)
+page_shell_extension_prefs_CPPFLAGS = $(gnome_shell_cflags)
+page_shell_extension_prefs_LDADD = $(GNOME_SHELL_LIBS)
+page_shell_extension_prefs_LDFLAGS = -rpath $(MUTTER_TYPELIB_DIR)
 
 if HAVE_NETWORKMANAGER
 
-libexec_PROGRAMS += gnome-shell-portal-helper
-gnome_shell_portal_helper_SOURCES = \
+libexec_PROGRAMS += page-shell-portal-helper
+page_shell_portal_helper_SOURCES = \
 	gnome-shell-portal-helper.c \
 	$(NULL)
-nodist_gnome_shell_portal_helper_SOURCES = \
+nodist_page_shell_portal_helper_SOURCES = \
 	$(top_builddir)/js/js-resources.c		\
 	$(top_builddir)/js/js-resources.h		\
 	$(NULL)
-gnome_shell_portal_helper_CPPFLAGS = $(gnome_shell_cflags)
-gnome_shell_portal_helper_LDADD = $(GNOME_SHELL_LIBS)
-gnome_shell_portal_helper_LDFLAGS = -rpath $(MUTTER_TYPELIB_DIR)
+page_shell_portal_helper_CPPFLAGS = $(gnome_shell_cflags)
+page_shell_portal_helper_LDADD = $(GNOME_SHELL_LIBS)
+page_shell_portal_helper_LDFLAGS = -rpath $(MUTTER_TYPELIB_DIR)
 
 endif
 
@@ -251,11 +251,11 @@ endif BUILD_RECORDER
 
 ########################################
 
-libexec_PROGRAMS += gnome-shell-perf-helper
+libexec_PROGRAMS += page-shell-perf-helper
 
-gnome_shell_perf_helper_SOURCES = shell-perf-helper.c
-gnome_shell_perf_helper_CPPFLAGS = $(SHELL_PERF_HELPER_CFLAGS)
-gnome_shell_perf_helper_LDADD = $(SHELL_PERF_HELPER_LIBS) -lm
+page_shell_perf_helper_SOURCES = shell-perf-helper.c
+page_shell_perf_helper_CPPFLAGS = $(SHELL_PERF_HELPER_CFLAGS)
+page_shell_perf_helper_LDADD = $(SHELL_PERF_HELPER_LIBS) -lm
 
 ########################################
 
@@ -332,7 +332,7 @@ ShellMenu_0_1_gir_SCANNERFLAGS = 	\
 INTROSPECTION_GIRS += ShellMenu-0.1.gir
 CLEANFILES += ShellMenu-0.1.gir
 
-Shell-0.1.gir: gnome-shell St-1.0.gir ShellMenu-0.1.gir
+Shell-0.1.gir: page-shell St-1.0.gir ShellMenu-0.1.gir
 Shell_0_1_gir_INCLUDES = Clutter-$(LIBMUTTER_API_VERSION) ClutterX11-$(LIBMUTTER_API_VERSION) Meta-$(LIBMUTTER_API_VERSION) Soup-2.4
 if HAVE_NETWORKMANAGER
 Shell_0_1_gir_INCLUDES += NetworkManager-1.0 NMClient-1.0

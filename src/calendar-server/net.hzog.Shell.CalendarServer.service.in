@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=net.hzog.Shell.CalendarServer
+Exec=@libexecdir@/page-shell-calendar-server

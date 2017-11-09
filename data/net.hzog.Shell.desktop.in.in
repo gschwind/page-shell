@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=GNOME Shell
+Name=PAGE Shell
 Comment=Window management and application launching
-Exec=@bindir@/gnome-shell
+Exec=@bindir@/page-shell
 X-GNOME-Bugzilla-Bugzilla=GNOME
 X-GNOME-Bugzilla-Product=gnome-shell
 X-GNOME-Bugzilla-Component=general

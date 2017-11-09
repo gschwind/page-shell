@@ -1,5 +1,5 @@
 AC_PREREQ(2.63)
-AC_INIT([gnome-shell],[3.24.3],[https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-shell],[gnome-shell])
+AC_INIT([page-shell],[3.24.3],[https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-shell],[page-shell])
 AX_IS_RELEASE([git-directory])
 
 AC_CONFIG_HEADERS([config.h])
@@ -23,7 +23,7 @@ LT_PREREQ([2.2.6])
 LT_INIT([disable-static])
 
 # i18n
-GETTEXT_PACKAGE=gnome-shell
+GETTEXT_PACKAGE=page-shell
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
@@ -255,19 +255,11 @@ AC_PATH_PROG([SASS],[sass],[])
 AC_CONFIG_FILES([
   Makefile
   data/Makefile
-  docs/Makefile
-  docs/reference/Makefile
-  docs/reference/shell/Makefile
-  docs/reference/shell/shell-docs.sgml
-  docs/reference/st/Makefile
-  docs/reference/st/st-docs.sgml
   js/Makefile
   src/Makefile
   src/gvc/Makefile
-  browser-plugin/Makefile
   tests/Makefile
   po/Makefile.in
-  man/Makefile
 ])
 AC_OUTPUT
 

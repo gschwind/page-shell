@@ -1,5 +1,5 @@
 <schemalist>
-  <schema id="org.gnome.shell" path="/org/gnome/shell/"
+  <schema id="net.hzog.shell" path="/net/hzog/shell/"
           gettext-domain="@GETTEXT_PACKAGE@">
     <key name="development-tools" type="b">
       <default>true</default>
@@ -94,7 +94,7 @@
     <child name="keyboard" schema="org.gnome.shell.keyboard"/>
   </schema>
 
-  <schema id="org.gnome.shell.keybindings" path="/org/gnome/shell/keybindings/"
+  <schema id="net.hzog.shell.keybindings" path="/net/hzog/shell/keybindings/"
           gettext-domain="@GETTEXT_PACKAGE@">
     <key name="open-application-menu" type="as">
       <default>["&lt;Super&gt;F10"]</default>
@@ -139,7 +139,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnome.shell.keyboard" path="/org/gnome/shell/keyboard/"
+  <schema id="net.hzog.shell.keyboard" path="/net/hzog/shell/keyboard/"
           gettext-domain="@GETTEXT_PACKAGE@">
     <key name="keyboard-type" type="s">
       <default>'touch'</default>
@@ -150,8 +150,8 @@
     </key>
   </schema>
 
-  <schema id="org.gnome.shell.app-switcher"
-          path="/org/gnome/shell/app-switcher/"
+  <schema id="net.hzog.shell.app-switcher"
+          path="/net/hzog/shell/app-switcher/"
           gettext-domain="@GETTEXT_PACKAGE@">
     <key type="b" name="current-workspace-only">
       <default>false</default>
@@ -163,15 +163,15 @@
     </key>
   </schema>
 
-  <enum id="org.gnome.shell.window-switcher.AppIconMode">
+  <enum id="net.hzog.shell.window-switcher.AppIconMode">
     <value value="1" nick="thumbnail-only"/>
     <value value="2" nick="app-icon-only"/>
     <value value="3" nick="both"/>
   </enum>
-  <schema id="org.gnome.shell.window-switcher"
-          path="/org/gnome/shell/window-switcher/"
+  <schema id="net.hzog.shell.window-switcher"
+          path="/net/gnome/shell/window-switcher/"
           gettext-domain="@GETTEXT_PACKAGE@">
-    <key name="app-icon-mode" enum="org.gnome.shell.window-switcher.AppIconMode">
+    <key name="app-icon-mode" enum="net.hzog.shell.window-switcher.AppIconMode">
       <default>'both'</default>
       <summary>The application icon mode.</summary>
       <description>
@@ -190,7 +190,7 @@
     </key>
   </schema>
 
-  <schema id="org.gnome.shell.overrides" path="/org/gnome/shell/overrides/"
+  <schema id="net.hzog.shell.overrides" path="/net/hzog/shell/overrides/"
 	  gettext-domain="@GETTEXT_PACKAGE@">
     <key name="attach-modal-dialogs" type="b">
       <default>true</default>

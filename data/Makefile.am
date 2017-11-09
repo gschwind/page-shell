@@ -2,21 +2,21 @@ CLEANFILES =
 NULL =
 
 desktopdir=$(datadir)/applications
-desktop_DATA = org.gnome.Shell.desktop gnome-shell-extension-prefs.desktop
+desktop_DATA = net.hzog.Shell.desktop page-shell-extension-prefs.desktop
 
 if HAVE_NETWORKMANAGER
-desktop_DATA += org.gnome.Shell.PortalHelper.desktop
+desktop_DATA += net.hzog.Shell.PortalHelper.desktop
 
 portaldir = $(datadir)/xdg-desktop-portal/portals
-portal_DATA = gnome-shell.portal
+portal_DATA = page-shell.portal
 
 servicedir = $(datadir)/dbus-1/services
-service_DATA = org.gnome.Shell.PortalHelper.service
+service_DATA = net.hzog.Shell.PortalHelper.service
 
 CLEANFILES += \
-	org.gnome.Shell.PortalHelper.service 	\
-	org.gnome.Shell.PortalHelper.desktop 	\
-	org.gnome.Shell.PortalHelper.desktop.in \
+	net.hzog.Shell.PortalHelper.service 	\
+	net.hzog.Shell.PortalHelper.desktop 	\
+	net.hzog.Shell.PortalHelper.desktop.in \
 	$(NULL)
 
 endif
@@ -36,14 +36,14 @@ endif
 	$(AM_V_GEN) $(MSGFMT) --desktop --template $(builddir)/$< \
 	                      -d $(top_srcdir)/po -o $@
 
-introspectiondir = $(datadir)/dbus-1/interfaces
-introspection_DATA =				\
-	org.gnome.Shell.PadOsd.xml		\
-	org.gnome.Shell.Screencast.xml		\
-	org.gnome.Shell.Screenshot.xml		\
-	org.gnome.ShellSearchProvider.xml	\
-	org.gnome.ShellSearchProvider2.xml	\
-	$(NULL)
+#introspectiondir = $(datadir)/dbus-1/interfaces
+#introspection_DATA =				\
+#	org.gnome.Shell.PadOsd.xml		\
+#	org.gnome.Shell.Screencast.xml		\
+#	org.gnome.Shell.Screenshot.xml		\
+#	org.gnome.ShellSearchProvider.xml	\
+#	org.gnome.ShellSearchProvider2.xml	\
+#	$(NULL)
 
 theme_sources = 						\
 	theme/gnome-shell-high-contrast.scss			\
@@ -74,11 +74,11 @@ dist_theme_files =						\
 		$(SASS) --sourcemap=none -f -q --update $<; \
 	fi
 
-resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/theme --generate-dependencies $(srcdir)/gnome-shell-theme.gresource.xml)
-gnome-shell-theme.gresource: gnome-shell-theme.gresource.xml $(resource_files)
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/theme --generate-dependencies $(srcdir)/page-shell-theme.gresource.xml)
+page-shell-theme.gresource: page-shell-theme.gresource.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir)/theme $<
 resourcedir = $(pkgdatadir)
-resource_DATA = gnome-shell-theme.gresource
+resource_DATA = page-shell-theme.gresource
 
 backgrounddir = $(pkgdatadir)
 background_DATA = perf-background.xml
@@ -87,10 +87,10 @@ perf-background.xml: perf-background.xml.in
 	$(AM_V_GEN) sed -e "s|@datadir[@]|$(datadir)|" \
 	    $< > $@ || rm $@
 
-keysdir = @GNOME_KEYBINDINGS_KEYSDIR@
-keys_DATA = 50-gnome-shell-system.xml
+#keysdir = @GNOME_KEYBINDINGS_KEYSDIR@
+#keys_DATA = 50-page-shell-system.xml
 
-gsettings_SCHEMAS = org.gnome.shell.gschema.xml
+gsettings_SCHEMAS = net.hzog.shell.gschema.xml
 
 %.gschema.xml: %.gschema.xml.in Makefile
 	$(AM_V_GEN) sed -e 's|@GETTEXT_PACKAGE[@]|$(GETTEXT_PACKAGE)|g' \
@@ -106,32 +106,30 @@ gschemas.compiled: $(gsettings_SCHEMAS:.xml=.valid)
 all-local: gschemas.compiled
 
 convertdir = $(datadir)/GConf/gsettings
-convert_DATA = gnome-shell-overrides.convert
+convert_DATA = page-shell-overrides.convert
 
 EXTRA_DIST =						\
-	org.gnome.Shell.desktop.in.in			\
-	gnome-shell-extension-prefs.desktop.in.in	\
+	net.hzog.Shell.desktop.in.in			\
+	page-shell-extension-prefs.desktop.in.in	\
 	$(portal_DATA)					\
-	$(introspection_DATA)				\
 	$(menu_DATA)					\
 	$(convert_DATA)					\
-	$(keys_DATA)					\
 	$(dist_theme_files)				\
 	perf-background.xml.in				\
-	org.gnome.Shell.PortalHelper.desktop.in.in	\
-	org.gnome.Shell.PortalHelper.service.in		\
-	org.gnome.shell.gschema.xml.in			\
-	gnome-shell-theme.gresource.xml 		\
+	net.hzog.Shell.PortalHelper.desktop.in.in	\
+	net.hzog.Shell.PortalHelper.service.in		\
+	net.hzog.shell.gschema.xml.in			\
+	page-shell-theme.gresource.xml 			\
 	$(resource_files)				\
 	$(NULL)
 
 CLEANFILES +=						\
-	org.gnome.Shell.desktop.in			\
-	gnome-shell-extension-prefs.in			\
+	net.hzog.Shell.desktop.in			\
+	page-shell-extension-prefs.in			\
 	$(desktop_DATA)					\
 	$(gsettings_SCHEMAS)				\
 	perf-background.xml				\
 	gschemas.compiled				\
-	org.gnome.shell.gschema.valid			\
-	gnome-shell-theme.gresource			\
+	net.hzog.shell.gschema.valid			\
+	page-shell-theme.gresource			\
 	$(NULL)

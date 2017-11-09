@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<KeyListEntries schema="org.gnome.shell.keybindings"
+<KeyListEntries schema="net.hzog.shell.keybindings"
                 group="system"
                 name="System"
-                wm_name="GNOME Shell"
-                package="gnome-shell">
+                wm_name="PAGE Shell"
+                package="page-shell">
 
 	<KeyListEntry name="toggle-message-tray"
                       description="Show the notification list"/>

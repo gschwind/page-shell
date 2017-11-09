@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=net.hzog.Shell.PortalHelper
+Exec=@libexecdir@/page-shell-portal-helper
