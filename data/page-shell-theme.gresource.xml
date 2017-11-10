@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/net/hzog/shell/theme">
+  <gresource prefix="/org/gnome/shell/theme">
     <file>calendar-arrow-left.svg</file>
     <file>calendar-arrow-right.svg</file>
     <file>calendar-today.svg</file>
