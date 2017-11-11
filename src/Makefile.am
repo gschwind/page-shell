@@ -27,6 +27,9 @@ service_DATA = $(service_in_files:.service.in=.service)
 		sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@.tmp && mv $@.tmp $@
 CLEANFILES += $(service_DATA)
 
+girdir = $(pkglibdir)
+gir_DATA = Shell-0.1.gir ShellMenu-0.1.gir St-1.0.gir
+
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
 
 bin_SCRIPTS += page-shell-extension-tool page-shell-perf-tool
