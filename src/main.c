@@ -197,7 +197,8 @@ shell_prefs_init (void)
 static void
 shell_introspection_init (void)
 {
-
+  g_irepository_prepend_library_path(MUTTER_TYPELIB_DIR);
+  g_irepository_prepend_library_path(GNOME_SHELL_PKGLIBDIR);
   g_irepository_prepend_search_path (MUTTER_TYPELIB_DIR);
   g_irepository_prepend_search_path (GNOME_SHELL_PKGLIBDIR);
 }
