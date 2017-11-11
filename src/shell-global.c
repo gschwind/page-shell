@@ -255,7 +255,7 @@ shell_global_init (ShellGlobal *global)
     }
 
   /* Ensure config dir exists for later use */
-  global->userdatadir = g_build_filename (g_get_user_data_dir (), "gnome-shell", NULL);
+  global->userdatadir = g_build_filename (g_get_user_data_dir (), "page-shell", NULL);
   g_mkdir_with_parents (global->userdatadir, 0700);
   global->userdatadir_path = g_file_new_for_path (global->userdatadir);
 

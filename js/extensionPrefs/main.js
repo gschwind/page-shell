@@ -35,7 +35,7 @@ function stripPrefix(string, prefix) {
 const Application = new Lang.Class({
     Name: 'Application',
     _init: function() {
-        GLib.set_prgname('gnome-shell-extension-prefs');
+        GLib.set_prgname('page-shell-extension-prefs');
         this.application = new Gtk.Application({
             application_id: 'org.gnome.shell.ExtensionPrefs',
             flags: Gio.ApplicationFlags.HANDLES_COMMAND_LINE
@@ -386,7 +386,7 @@ function initEnvironment() {
             log('ERROR: ' + s);
         },
 
-        userdatadir: GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-shell'])
+        userdatadir: GLib.build_filenamev([GLib.get_user_data_dir(), 'page-shell'])
     };
 
     String.prototype.format = Format.format;
