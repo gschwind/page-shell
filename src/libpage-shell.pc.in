@@ -8,7 +8,7 @@ apiversion=@LIBMUTTER_API_VERSION@
 
 Name: libpage-shell
 Description: Page Shell library
-Requires: gsettings-desktop-schemas gtk+-3.0 page-mutter-@LIBMUTTER_API_VERSION@ x11
+Requires: gsettings-desktop-schemas gtk+-3.0 libpage-mutter-@LIBMUTTER_API_VERSION@ page-mutter-cogl-@LIBMUTTER_API_VERSION@ page-mutter-cogl-pango-@LIBMUTTER_API_VERSION@ page-mutter-clutter-@LIBMUTTER_API_VERSION@ x11
 Version: @VERSION@
-Libs: -L${libdir} -lgnome-shell
+Libs: -L${libdir}/page-shell -lgnome-shell
 Cflags: -I${includedir}/page-shell
